@@ -157,17 +157,18 @@ export default {
       //   Indicator.close()
       //   that.$router.push('/dealphoto')
       // }), 3000)
-      html2canvas(that.$refs.box, {
+      html2canvas(this.$refs.box, {
         async: true,
         allowTaint: true,
         taintTest: true,
-        useCORS: true
-      }).then(function (canvas) {
+        useCORS: true,
+        dpi: window.devicePixelRatio
+      }).then((canvas) => {
         console.log(canvas)
         console.log(canvas.toDataURL())
-        that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+        this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
         window.localStorage.setItem('firstImg', canvas.toDataURL())
-        that.$router.replace('/dealphoto')
+        this.$router.replace('/dealphoto')
       })
     },
     base64ToBlob (code) {
