@@ -343,12 +343,12 @@ export default {
         }
         .model-img {
           position: absolute;
-          right: 1rem;
-          top: 3rem;
+          right: 0.5rem;
+          top: 2rem;
           z-index: 99;
           background: transparent;
           img {
-            width: 5rem;
+            width: 7.5rem;
             background: transparent;
           }
         }

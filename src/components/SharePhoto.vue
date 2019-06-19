@@ -32,7 +32,7 @@ import { _parseJSON } from '../common/utils'
 import html2canvas from 'html2canvas'
 import { initWechatJs } from '../common/wechat'
 export default {
-  name: 'DealPhoto',
+  name: 'SharePhoto',
   data () {
     return {
       secondImg: '',
