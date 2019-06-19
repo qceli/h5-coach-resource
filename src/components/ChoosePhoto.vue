@@ -1,8 +1,8 @@
 <template>
   <div class="choose-container">
-    <div class="choose-bg">
+    <!-- <div class="choose-bg">
       <img src="../assets/images/page_bg@2x.jpg" />
-    </div>
+    </div> -->
     <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
     <div class="camera-img"><img src="../assets/images/take_photo@2x.png" /></div>
     <div class="choose-button">
@@ -51,19 +51,25 @@ export default {
 
 <style scoped lang="scss">
 .choose-container {
+  position: fixed;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  .choose-bg {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    z-index: -999;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
+  background-image: url("../assets/images/page_bg@2x.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  left: 50%;
+  transform: translateX(-50%);
+  background-size: cover;
+//   .choose-bg {
+//     position: relative;
+//     width: 100%;
+//     height: 100%;
+//     z-index: -999;
+//     img {
+//       width: 100%;
+//       height: 100%;
+//     }
+//   }
   .logo-img {
     position: absolute;
     top: 3rem;

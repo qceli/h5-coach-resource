@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="fade" mode="in-out" type="animation" duration="1000">
+    <transition :name="transitionName"  mode="out-in">
       <router-view></router-view>
     </transition>
   </div>
@@ -13,7 +13,7 @@ export default {
   name: 'App',
   data () {
     return {
-      transitionName: ''
+      transitionName: 'fade'
     }
   },
   mounted () {
@@ -38,6 +38,25 @@ export default {
 </script>
 
 <style lang='scss'>
+.fade-enter-active {
+  opacity: 0.78;
+  transition: opacity 0.2s
+}
+
+.fade-leave-active {
+    opacity: 0.78;
+    transition: opacity 0.2s
+}
+
+.fade-enter {
+  opacity: 0.5;
+  transition: opacity 0.2s
+}
+
+.fade-leave-to {
+    opacity: 0.5;
+    transition: opacity 0.2s
+}
 html, body {
   width: 100%;
   height: 100%;
@@ -52,19 +71,19 @@ html, body {
     color: #2c3e50;
     width: 100%;
     height: 100%;
-    .fade-enter {
-      opacity:0;
-    }
-    .fade-leave{
-      opacity:1;
-    }
-    .fade-enter-active{
-      transition:opacity .5s;
-    }
-    .fade-leave-active{
-      opacity:0;
-      transition:opacity .5s;
-    }
+    // .fade-enter {
+    //   opacity:0;
+    // }
+    // .fade-leave{
+    //   opacity:1;
+    // }
+    // .fade-enter-active{
+    //   transition:opacity .5s;
+    // }
+    // .fade-leave-active{
+    //   opacity:0;
+    //   transition:opacity .5s;
+    // }
   }
 }
 button {

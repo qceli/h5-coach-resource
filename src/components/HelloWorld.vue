@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div class="home-container">
-      <img src="../assets/images/home_bg@2x.png" />
+      <!-- <img src="../assets/images/home_bg@2x.png" /> -->
       <div class="logo-img"><img src="../assets/images/logo@2x.png"></div>
       <div class="home-button">
         <div class="start-button" @click="startPhoto">上传照片</div>
@@ -44,9 +44,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .home-page {
+  position: fixed;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  //overflow: hidden;
+  background-image: url("../assets/images/home_bg@2x.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  left: 50%;
+  transform: translateX(-50%);
+  background-size: cover;
   .home-container {
     width: 100%;
     height: 100%;
