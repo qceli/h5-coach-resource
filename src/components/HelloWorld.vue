@@ -2,7 +2,7 @@
   <div class="home-page">
     <div class="home-container">
       <!-- <img src="../assets/images/home_bg@2x.png" /> -->
-      <div class="logo-img"><img src="../assets/images/logo@2x.png"></div>
+      <!-- <div class="logo-img"><img src="../assets/images/logo@2x.png"></div> -->
       <div class="home-button">
         <div class="start-button" @click="startPhoto">上传照片</div>
       </div>
@@ -48,7 +48,7 @@ export default {
   width: 100%;
   height: 100%;
   //overflow: hidden;
-  background-image: url("../assets/images/home_bg@2x.png");
+  background-image: url("../assets/images/home_bg_1@2x.jpg");
   background-repeat: no-repeat;
   background-position: center;
   left: 50%;
