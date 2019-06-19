@@ -1,14 +1,15 @@
 <template>
   <div id="app">
     <transition :name="transitionName"  mode="out-in">
-      <router-view></router-view>
+      <!-- <keep-alive> -->
+          <router-view></router-view>
+      <!-- </keep-alive> -->
     </transition>
   </div>
 </template>
 
 <script>
-// import { initWechatJs } from '@/common/wechat'
-// import { _parseJSON } from '@/common/utils'
+
 export default {
   name: 'App',
   data () {
@@ -17,22 +18,10 @@ export default {
     }
   },
   mounted () {
-    // this.$nextTick(function () {
-    // this.initWechatJs()
-    // })
+
   },
   methods: {
-    // initWechatJs () {
-    //   this.axios.post('http://coach.realmshow.com/api/webchat-api/pub/signature').then((res) => {
-    //     if (res.data.code === 200) {
-    //       var wechatSign = _parseJSON(res.data.data)
-    //       console.log(wechatSign)
-    //       initWechatJs(wechatSign.appId, wechatSign.nonce, wechatSign.timestamp, wechatSign.signature)
-    //     }
-    //   }).catch((response) => {
-    //     console.log(response)
-    //   })
-    // }
+
   }
 }
 </script>

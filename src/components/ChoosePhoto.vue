@@ -3,6 +3,7 @@
     <!-- <div class="choose-bg">
       <img src="../assets/images/page_bg@2x.jpg" />
     </div> -->
+    
     <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
     <div class="camera-img"><img src="../assets/images/take_photo@2x.png" /></div>
     <div class="choose-button">
@@ -54,7 +55,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-image: url("../assets/images/page_bg@2x.png");
+  background-image: url(../assets/images/page_bg@2x.jpg);
   background-repeat: no-repeat;
   background-position: center;
   left: 50%;
