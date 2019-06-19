@@ -67,6 +67,7 @@ export default {
         if (res.data.code === 200) {
           var wechatSign = _parseJSON(res.data.data)
           console.log(wechatSign)
+          alert(link)
           initWechatJs(wechatSign.appId, wechatSign.nonce, wechatSign.timestamp, wechatSign.signature, '/sharephoto', link, imgUrl)
         }
       }).catch((response) => {
@@ -78,8 +79,8 @@ export default {
       // 做初始化动作
       // var heightStyle = this.$refs.imgbox.style.height
       // console.log('heightStyle:' + heightStyle)
-      if (this.imgUrl) return
-      setTimeout(this.testImg(), 3000)
+      // if (this.imgUrl) return
+      this.testImg()
       // this.$refs.sharebox.style.height = heightStyle
     },
     base64ToBlob (code) {
