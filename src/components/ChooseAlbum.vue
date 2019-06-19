@@ -164,6 +164,7 @@ export default {
         allowTaint: true,
         taintTest: true,
         useCORS: true,
+        foreignObjectRendering: true,
         dpi: window.devicePixelRatio
       }).then((canvas) => {
         console.log(canvas)
