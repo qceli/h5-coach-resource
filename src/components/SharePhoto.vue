@@ -31,6 +31,24 @@
 import { _parseJSON } from '../common/utils'
 import html2canvas from 'html2canvas'
 import { initWechatJs } from '../common/wechat'
+
+function UrlParameters() {
+  let name, value;
+  let str = window.location.href
+  let num = str.indexOf("?");
+  str = str.substr(num + 1); //取得所有参数   stringlet.substr(start [, length ]
+
+  let arr = str.split("&"); //各个参数放到数组里
+  for (let i = 0; i < arr.length; i++) {
+    num = arr[i].indexOf("=");
+    if (num > 0) {
+      name = arr[i].substring(0, num);
+      value = arr[i].substr(num + 1);
+      this[name] = value;
+    }
+  }
+}
+
 export default {
   name: 'SharePhoto',
   data () {
@@ -43,13 +61,16 @@ export default {
   mounted () {
     var id = this.$route.query.id
     var pageUrl = window.location.href
+    alert(pageUrl)
     var index = pageUrl.lastIndexOf('url=')
-    var params = pageUrl.substring(index + 4, pageUrl.length)
-    // alert(params)
-    console.log(decodeURIComponent(params))
+    //var params = pageUrl.substring(index + 4, pageUrl.length)
+    const queries = new UrlParameters() || {};
+    const url = queries["url"];
+    alert(url)
+    // console.log(decodeURIComponent(params))
     if (!id) {
       this.$refs.box.style.display = 'none'
-      this.imgUrl = decodeURIComponent(params)
+      this.imgUrl = url // decodeURIComponent(params)
       // this.shareInfo(pageUrl, params)
     } else {
       this.$refs.sharebox.style.display = 'none'
@@ -67,7 +88,7 @@ export default {
         if (res.data.code === 200) {
           var wechatSign = _parseJSON(res.data.data)
           console.log(wechatSign)
-          alert(link)
+          // alert(link)
           initWechatJs(wechatSign.appId, wechatSign.nonce, wechatSign.timestamp, wechatSign.signature, '/sharephoto', link, imgUrl)
         }
       }).catch((response) => {
@@ -131,14 +152,14 @@ export default {
         //   alert(content.url)
           var u = navigator.userAgent
 
-          var link = location.origin + '/h5/#/sharephoto?'
+          var link = location.origin + '/h5/#sharephoto?'
         //   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // 安卓端
         //   if (isAndroid) {
         //     link = 'http://coach.realmshow.com/h5/#sharephoto?from=singlemessage' + '&url=' + content.url
         //   } else {
         //     link = link + '&url=' + content.url
         //   }
-          link = link + '&url=' + content.url
+          link = link + 'url=' + content.url
           // var params = getQueryString('url')
           // alert('shenghai')
           // alert(link)
