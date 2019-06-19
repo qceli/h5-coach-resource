@@ -12,7 +12,9 @@
           <!-- <div class="upload-photo" @touchmove="onmousemove($event)" @touchend="onmouseup($event)" :style="{'z-index': photoIndex}"><img :style="{'left:': photoLeft,'top': photoTop}" :src="localIds" draggable="true" alt="分享背景图" @touchstart="onmousedown($event)" ref='actionMgr'></div> -->
           <!-- <div class="upload-photo"><img src="../assets/images/apply-bg@2x.png" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div> -->
           <!-- <div class="upload-photo"><img :src="localIds" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div>           -->
-          <div class="upload-photo" :style="{'backgroundImage': 'url(' + localIds + ')'}"></div>
+          <div class="upload-photo">
+            <img :src="localIds"/>         
+          </div>
           <div class="model-img"><img src="../assets/images/star.png" /></div>
         </div>
         <!-- <div class="share-img" ref="sharebox">
@@ -340,6 +342,11 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
         .model-img {
           position: absolute;
