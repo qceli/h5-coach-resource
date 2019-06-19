@@ -26,11 +26,11 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       console.log('ChoosePhoto activited')
-      vm.initWechatJs()
+      vm.initWechatJsex()
     })
   },
   methods: {
-    initWechatJs () {
+    initWechatJsex () {
       this.axios.post('http://coach.realmshow.com/api/webchat-api/pub/signature').then((res) => {
         if (res.data.code === 200) {
           var wechatSign = _parseJSON(res.data.data)

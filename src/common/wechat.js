@@ -1,5 +1,7 @@
 // 微信相关的方法
-const wx = window.wx || {};
+//const wx = window.wx || {};
+
+import wx from "weixin-js-sdk";
 //var isLogin = false;
 export const initWechatJs = (
   appId,
@@ -22,28 +24,10 @@ export const initWechatJs = (
       "uploadImage",
       "onMenuShareTimeline",
       "getLocalImgData",
-      "onMenuShareAppMessage"
+      "onMenuShareAppMessage",
     ]
   });
   wx.ready(function() {
-    // wx.showOptionMenu()
-    // alert(router)
-    // if (router === '/sharephoto') {
-    //   shareInfo(link, imgUrl)
-    // } else {
-    //   wx.onMenuShareTimeline({
-    //     title: `coach`,
-    //     link: 'http://coach.realmshow.com',
-    //     imgUrl: ``
-    //   })
-    //   wx.onMenuShareAppMessage({
-    //     title: `coach`, // 分享标题
-    //     desc: `coach`, // 分享描述
-    //     link: 'http://coach.realmshow.com', // 分享链接
-    //     imgUrl: `` // 分享图片
-    //   })
-    // }
-    // shareInfo(link, imgUrl);
     wx.onMenuShareTimeline({
       title: "coach", // 分享时的标题
       link: link, // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -61,7 +45,8 @@ export const initWechatJs = (
       link: link, // 分享链接
       imgUrl: imgUrl, // 分享图片
       success: function success(res) {
-        //alert('已分享');
+        // alert('已分享');
+        // alert(uuu);
       },
       cancel: function cancel(res) {
         //alert('已取消');
@@ -70,6 +55,9 @@ export const initWechatJs = (
         alert(JSON.stringify(res));
       }
     });
+  });
+  wx.error(function(res) {
+    alert("微信验证失败");
   });
 };
 
@@ -96,35 +84,3 @@ export const openCameraForPic = function(type, uploadCallback) {
     }
   });
 };
-
-// export const shareInfo = function(link, imgUrl) {
-//   // alert(link)
-//   console.log(link);
-//   console.log(imgUrl);
-//   wx.onMenuShareTimeline({
-//     title: "coach", // 分享时的标题
-//     link: link, // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-//     imgUrl: imgUrl, // 分享时显示的图标
-//     success: function() {
-//       console.log();
-//     },
-//     cancel: function() {
-//       alert("取消分享");
-//     }
-//   });
-//   wx.onMenuShareAppMessage({
-//     title: "coach", // 分享标题
-//     desc: "coach", // 分享描述
-//     link: link, // 分享链接
-//     imgUrl: imgUrl, // 分享图片
-//     success: function success(res) {
-//       //alert('已分享');
-//     },
-//     cancel: function cancel(res) {
-//       //alert('已取消');
-//     },
-//     fail: function fail(res) {
-//       alert(JSON.stringify(res));
-//     }
-//   });
-// };

@@ -43,6 +43,7 @@
 <script>
 import html2canvas from 'html2canvas'
 import { _parseJSON } from '../common/utils'
+import wx from "weixin-js-sdk";
 // import { setTimeout } from 'timers'
 // import { Indicator } from 'mint-ui'
 // import { initWechatJs } from '@/common/wechat'
@@ -87,7 +88,7 @@ export default {
     // } else {
     //
     // }
-    window.wx.uploadImage({
+    wx.uploadImage({
       localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
       isShowProgressTips: 1, // 默认为1，显示进度提示
       success: function (respons) {

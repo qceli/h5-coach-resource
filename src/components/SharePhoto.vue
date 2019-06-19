@@ -23,18 +23,18 @@
       <div>您到专属合影已生成</div>
       <div>点击右上角分享至朋友圈</div>
     </div>
-    <!-- <div @click="testImg">生成图片</div> -->
   </div>
 </template>
 
 <script>
-import { _parseJSON } from '../common/utils'
-import html2canvas from 'html2canvas'
-import { initWechatJs } from '../common/wechat'
+import { _parseJSON } from "../common/utils";
+import html2canvas from "html2canvas";
+import { initWechatJs } from "../common/wechat";
 
-function UrlParameters(str) {
+function UrlParameters() {
   let name, value;
-  let num = str.indexOf("?");
+  let str = location.origin + location.search;
+  let num = str.lastIndexOf("?");
   str = str.substr(num + 1); //取得所有参数   stringlet.substr(start [, length ]
 
   let arr = str.split("&"); //各个参数放到数组里
@@ -49,73 +49,75 @@ function UrlParameters(str) {
 }
 
 export default {
-  name: 'SharePhoto',
-  data () {
+  name: "SharePhoto",
+  data() {
     return {
-      secondImg: '',
-      imgUrl: '',
-      params: ''
-    }
+      secondImg: "",
+      imgUrl: "",
+      params: ""
+    };
   },
-  mounted () {
-    var id = this.$route.query.id
-    var pageUrl = window.location.href
-    alert(pageUrl)
-    var index = pageUrl.lastIndexOf('url=')
-    //var params = pageUrl.substring(index + 4, pageUrl.length)
-    const queries = new UrlParameters(pageUrl) || {};
-    const url = queries["url"];
-    alert(url)
+  mounted() {
+    var id = this.$route.query.id;
     // console.log(decodeURIComponent(params))
     if (!id) {
-      this.$refs.box.style.display = 'none'
-      this.imgUrl = url // decodeURIComponent(params)
-      // this.shareInfo(pageUrl, params)
+      var pageUrl = window.location.href;
+      var index = pageUrl.lastIndexOf("url=");
+      //var params = pageUrl.substring(index + 4, pageUrl.length)
+      const queries = new UrlParameters() || {};
+      const url = queries["url"];
+      // alert(url);
+      this.$refs.box.style.display = "none";
+      this.imgUrl = url; //decodeURIComponent(params)
     } else {
-      this.$refs.sharebox.style.display = 'none'
-      var firstImg = window.localStorage.getItem('firstImg')
+      this.$refs.sharebox.style.display = "none";
+      var firstImg = window.localStorage.getItem("firstImg");
       if (!firstImg) {
-        return
+        return;
       }
-      this.secondImg = firstImg
+      this.secondImg = firstImg;
     }
-    // setTimeout(this.testImg, 3000)
   },
   methods: {
-    shareInfo (link, imgUrl) {
-      this.axios.post('http://coach.realmshow.com/api/webchat-api/pub/signature').then((res) => {
-        if (res.data.code === 200) {
-          var wechatSign = _parseJSON(res.data.data)
-          console.log(wechatSign)
-          // alert(link)
-          initWechatJs(wechatSign.appId, wechatSign.nonce, wechatSign.timestamp, wechatSign.signature, '/sharephoto', link, imgUrl)
-        }
-      }).catch((response) => {
-        console.log(response)
-      })
+    shareInfo(link, imgUrl) {
+      this.axios
+        .post("http://coach.realmshow.com/api/webchat-api/pub/signature")
+        .then(res => {
+          if (res.data.code === 200) {
+            var wechatSign = _parseJSON(res.data.data);
+            console.log(wechatSign);
+            initWechatJs(
+              wechatSign.appId,
+              wechatSign.nonce,
+              wechatSign.timestamp,
+              wechatSign.signature,
+              "/sharephoto",
+              link,
+              imgUrl
+            );
+          }
+        })
+        .catch(response => {
+          console.log(response);
+        });
     },
-    loadImg () {
-      console.log('loadImg')
-      // 做初始化动作
-      // var heightStyle = this.$refs.imgbox.style.height
-      // console.log('heightStyle:' + heightStyle)
-      // if (this.imgUrl) return
-      this.testImg()
-      // this.$refs.sharebox.style.height = heightStyle
+    loadImg() {
+      console.log("loadImg");
+      this.testImg();
     },
-    base64ToBlob (code) {
-      let parts = code.split(';base64,')
-      let contentType = parts[0].split(':')[1]
-      let raw = window.atob(parts[1])
-      let rawLength = raw.length
-      let uInt8Array = new Uint8Array(rawLength)
+    base64ToBlob(code) {
+      let parts = code.split(";base64,");
+      let contentType = parts[0].split(":")[1];
+      let raw = window.atob(parts[1]);
+      let rawLength = raw.length;
+      let uInt8Array = new Uint8Array(rawLength);
       for (let i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i)
+        uInt8Array[i] = raw.charCodeAt(i);
       }
-      return new Blob([uInt8Array], { type: contentType })
+      return new Blob([uInt8Array], { type: contentType });
     },
-    testImg () {
-      var that = this
+    testImg() {
+      var that = this;
       html2canvas(that.$refs.box, {
         async: true,
         allowTaint: true,
@@ -123,53 +125,42 @@ export default {
         useCORS: true,
         backgroundColor: null,
         dpi: window.devicePixelRatio
-      }).then(function (canvas) {
+      }).then(function(canvas) {
         // console.log(canvas)
-        console.log(canvas.toDataURL())
+        console.log(canvas.toDataURL());
         var lastImg = URL.createObjectURL(
           that.base64ToBlob(canvas.toDataURL())
-        )
-        that.imgUrl = lastImg
-        that.$refs.box.style.display = 'none'
-        that.$refs.sharebox.style.display = ''
-        that.getImgUrl(canvas.toDataURL())
-      })
+        );
+        that.imgUrl = lastImg;
+        that.$refs.box.style.display = "none";
+        that.$refs.sharebox.style.display = "";
+        that.getImgUrl(canvas.toDataURL());
+      });
     },
-    getImgUrl (baseImg) {
-      var that = this
-      that.axios.post('http://coach.realmshow.com/api/file/upload', {
-        filecontent: baseImg
-      }).then(res => {
-        if (res.data.code === 200) {
-          var content = _parseJSON(res.data.data)
-          that.imgUrl = content.url
-          // var link = window.location.href
+    getImgUrl(baseImg) {
+      var that = this;
+      that.axios
+        .post("http://coach.realmshow.com/api/file/upload", {
+          filecontent: baseImg
+        })
+        .then(res => {
+          if (res.data.code === 200) {
+            var content = _parseJSON(res.data.data);
+            that.imgUrl = content.url;
+            var u = navigator.userAgent;
+            var link = location.origin + "/h5?";
+            link = link + "url=" + content.url + "#SharePhoto";
 
-        //   alert(location.origin)
-        //   alert(location.search)
-        //   alert(link)
-        //   alert(content.url)
-          var u = navigator.userAgent
-
-          var link = location.origin + '/h5/#sharephoto?'
-        //   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // 安卓端
-        //   if (isAndroid) {
-        //     link = 'http://coach.realmshow.com/h5/#sharephoto?from=singlemessage' + '&url=' + content.url
-        //   } else {
-        //     link = link + '&url=' + content.url
-        //   }
-          link = link + 'url=' + content.url
-          // var params = getQueryString('url')
-          // alert('shenghai')
-          // alert(link)
-          that.shareInfo(link, content.url)
-        }
-      }).catch(response => {
-        console.log(response)
-      })
+            var imgurl = location.origin + "/h5/star.png"
+            that.shareInfo(link, imgurl);content.url
+          }
+        })
+        .catch(response => {
+          console.log(response);
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped lang='scss'>
