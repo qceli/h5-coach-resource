@@ -22,7 +22,6 @@ export default {
     }
   },
   mounted () {
-    this.initWechatJs()
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
