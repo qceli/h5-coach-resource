@@ -99,7 +99,8 @@ export default {
         allowTaint: true,
         taintTest: true,
         useCORS: true,
-        backgroundColor: null
+        backgroundColor: null,
+        dpi: window.devicePixelRatio
       }).then(function (canvas) {
         // console.log(canvas)
         console.log(canvas.toDataURL())
