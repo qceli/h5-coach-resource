@@ -2,7 +2,7 @@
   <div class="home-page">
     <div class="home-container">
       <!-- <img src="../assets/images/home_bg@2x.png" /> -->
-      <div class="logo-img"><img src="../assets/images/logo@2x.png"></div>
+      <!-- <div class="logo-img"><img src="../assets/images/logo@2x.png"></div> -->
       <div class="home-button">
         <div class="start-button" @click="startPhoto">上传照片</div>
       </div>
