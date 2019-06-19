@@ -32,7 +32,7 @@ import { _parseJSON } from '../common/utils'
 import html2canvas from 'html2canvas'
 import { initWechatJs } from '../common/wechat'
 export default {
-  name: 'DealPhoto',
+  name: 'SharePhoto',
   data () {
     return {
       secondImg: '',
@@ -45,11 +45,12 @@ export default {
     var pageUrl = window.location.href
     var index = pageUrl.lastIndexOf('url=')
     var params = pageUrl.substring(index + 4, pageUrl.length)
+    // alert(params)
     console.log(decodeURIComponent(params))
     if (!id) {
       this.$refs.box.style.display = 'none'
       this.imgUrl = decodeURIComponent(params)
-      this.shareInfo(pageUrl, params)
+      // this.shareInfo(pageUrl, params)
     } else {
       this.$refs.sharebox.style.display = 'none'
       var firstImg = window.localStorage.getItem('firstImg')
@@ -120,16 +121,25 @@ export default {
         if (res.data.code === 200) {
           var content = _parseJSON(res.data.data)
           that.imgUrl = content.url
-          var link = window.location.href
+          // var link = window.location.href
+
+        //   alert(location.origin)
+        //   alert(location.search)
+        //   alert(link)
+        //   alert(content.url)
           var u = navigator.userAgent
-          var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // 安卓端
-          if (isAndroid) {
-            link = 'http://coach.realmshow.com/h5/?from=singlemessage#/sharephoto' + '?url=' + content.url
-          } else {
-            link = link + '?url=' + content.url
-          }
+
+          var link = location.origin + '/h5/#/sharephoto?'
+        //   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // 安卓端
+        //   if (isAndroid) {
+        //     link = 'http://coach.realmshow.com/h5/#sharephoto?from=singlemessage' + '&url=' + content.url
+        //   } else {
+        //     link = link + '&url=' + content.url
+        //   }
+          link = link + '&url=' + content.url
           // var params = getQueryString('url')
-          console.log('getImgUrl:' + link)
+          // alert('shenghai')
+          // alert(link)
           that.shareInfo(link, content.url)
         }
       }).catch(response => {
