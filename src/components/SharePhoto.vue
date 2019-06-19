@@ -32,9 +32,8 @@ import { _parseJSON } from '../common/utils'
 import html2canvas from 'html2canvas'
 import { initWechatJs } from '../common/wechat'
 
-function UrlParameters() {
+function UrlParameters(str) {
   let name, value;
-  let str = window.location.href
   let num = str.indexOf("?");
   str = str.substr(num + 1); //取得所有参数   stringlet.substr(start [, length ]
 
@@ -64,7 +63,7 @@ export default {
     alert(pageUrl)
     var index = pageUrl.lastIndexOf('url=')
     //var params = pageUrl.substring(index + 4, pageUrl.length)
-    const queries = new UrlParameters() || {};
+    const queries = new UrlParameters(pageUrl) || {};
     const url = queries["url"];
     alert(url)
     // console.log(decodeURIComponent(params))
