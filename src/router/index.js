@@ -7,50 +7,50 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: "/",
-      name: "HelloWorld",
+      path: '/',
+      name: 'HelloWorld',
       component: HelloWorld,
       meta: {
         index: 0
       }
     },
     {
-      path: "/choosephoto",
-      name: "ChoosePhoto",
-      component: () => import("@/components/ChoosePhoto"),
+      path: '/choosephoto',
+      name: 'ChoosePhoto',
+      component: () => import('@/components/ChoosePhoto'),
       meta: {
         index: 1
       }
     },
     {
-      path: "/choosealbum",
-      name: "ChooseAlbum",
-      component: () => import("@/components/ChooseAlbum"),
+      path: '/choosealbum',
+      name: 'ChooseAlbum',
+      component: () => import('@/components/ChooseAlbum'),
       meta: {
         index: 2
       }
     },
     {
-      path: "/dealphoto",
-      name: "DealPhoto",
-      component: () => import("@/components/DealPhoto"),
+      path: '/dealphoto',
+      name: 'DealPhoto',
+      component: () => import('@/components/DealPhoto'),
       meta: {
         index: 3
       }
     },
     {
-      path: "/sharephoto",
-      name: "SharePhoto",
-      component: () => import("@/components/SharePhoto"),
+      path: '/sharephoto',
+      name: 'SharePhoto',
+      component: () => import('@/components/SharePhoto'),
       meta: {
         index: 4
       }
     }
-  ],
-  scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { x: 0, y: 0 };
-  }
-});
+  ]
+  //   scrollBehavior(to, from, savedPosition) {
+  //     return savedPosition || { x: 0, y: 0 };
+  //   }
+})
 
 // var firstEnter = true
 

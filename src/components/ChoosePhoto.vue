@@ -3,7 +3,6 @@
     <!-- <div class="choose-bg">
       <img src="../assets/images/page_bg@2x.jpg" />
     </div> -->
-    
     <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
     <div class="camera-img"><img src="../assets/images/take_photo@2x.png" /></div>
     <div class="choose-button">
@@ -24,6 +23,12 @@ export default {
   },
   mounted () {
     this.initWechatJs()
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      console.log('ChoosePhoto activited')
+      vm.initWechatJs()
+    })
   },
   methods: {
     initWechatJs () {
