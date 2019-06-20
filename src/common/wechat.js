@@ -29,7 +29,7 @@ export const initWechatJs = (
   });
   wx.ready(function() {
     wx.onMenuShareTimeline({
-      title: "coach", // 分享时的标题
+      title: "COACH和任嘉伦一起表爱意", // 分享时的标题
       link: link, // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
       imgUrl: imgUrl, // 分享时显示的图标
       success: function() {
@@ -40,8 +40,8 @@ export const initWechatJs = (
       }
     });
     wx.onMenuShareAppMessage({
-      title: "coach", // 分享标题
-      desc: "coach", // 分享描述
+      title: "COACH和任嘉伦一起表爱意", // 分享标题
+      desc: "COACH腕表和任嘉伦一起表爱意。", // 分享描述
       link: link, // 分享链接
       imgUrl: imgUrl, // 分享图片
       success: function success(res) {
