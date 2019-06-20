@@ -1,25 +1,31 @@
 <template>
   <div class="choose-container">
     <!--<div class="choose-bg">-->
-      <!--<img src="../assets/images/page_bg@2x.png" />-->
+    <!--<img src="../assets/images/page_bg@2x.png" />-->
     <!--</div>-->
     <div class="choose-contant">
-      <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
+      <div class="logo-img">
+        <img src="../assets/images/logo@2x.png">
+      </div>
       <!-- <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
-      <div class="photo-img" ref='pageDiv'>
+      <div class="photo-img" ref="pageDiv">
         <div class="people-img" ref="box">
-          <div class="album-img-bg"><img :src="albumImg" /></div>
+          <div class="album-img-bg">
+            <img :src="albumImg">
+          </div>
           <!-- <div class="upload-photo" @touchmove="onmousemove($event)" @touchend="onmouseup($event)" :style="{'z-index': photoIndex}"><img :style="{'left:': photoLeft,'top': photoTop}" :src="localIds" draggable="true" alt="分享背景图" @touchstart="onmousedown($event)" ref='actionMgr'></div> -->
           <!-- <div class="upload-photo"><img src="../assets/images/apply-bg@2x.png" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div> -->
           <!-- <div class="upload-photo"><img :src="localIds" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div>           -->
           <div class="upload-photo">
-            <img :src="localIds"/>         
+            <img :src="localIds">
           </div>
-          <div class="model-img"><img src="../assets/images/star.png" /></div>
+          <div class="model-img">
+            <img src="../assets/images/star.png">
+          </div>
         </div>
         <!-- <div class="share-img" ref="sharebox">
           <img :src="imgUrl" crossorigin="anonymous" alt="分享图">
-        </div> -->
+        </div>-->
       </div>
     </div>
 
@@ -27,7 +33,7 @@
     <div class="ablum-list">
       <ul>
         <li v-for="(album, index) in albumArray" :key="index">
-          <img :src="album" @click="changeAlbum(album)" />
+          <img :src="album" @click="changeAlbum(album)">
         </li>
       </ul>
     </div>
@@ -36,44 +42,46 @@
       <div @click="goBack" class="btn-div">上一步</div>
       <div @click="dealPhoto" class="btn-div last">下一步</div>
     </div>
+    <!-- <img class="sss" :src="testImg"> -->
 
-    </div>
+  </div>
 </template>
 
 <script>
-import html2canvas from 'html2canvas'
-import { _parseJSON } from '../common/utils'
+import html2canvas from "html2canvas";
+import { _parseJSON } from "../common/utils";
 import wx from "weixin-js-sdk";
 // import { setTimeout } from 'timers'
 // import { Indicator } from 'mint-ui'
 // import { initWechatJs } from '@/common/wechat'
 export default {
-  name: 'ChooseAlbum',
-  data () {
+  name: "ChooseAlbum",
+  data() {
     return {
-      localIds: '',
-      imgUrl: '',
+      localIds: "",
+      imgUrl: "",
       // mousedownState: false, // 鼠标默认抬起
       // iX: 0, // 鼠标坐标 与 拖拽按钮 间距 x
       // iY: 0, // 鼠标坐标 与 拖拽按钮 间距 y
       albumArray: [
-        require('../assets/images/album_1@2x.png'),
-        require('../assets/images/album_2@2x.png'),
-        require('../assets/images/album_3@2x.png')
+        require("../assets/images/album_1@2x.png"),
+        require("../assets/images/album_2@2x.png"),
+        require("../assets/images/album_3@2x.png")
       ],
-      albumImg: require('../assets/images/album_1@2x.png'),
+      albumImg: require("../assets/images/album_1@2x.png"),
       // photoIndex: 1000,
       // photoLeft: 0,
       // photoTop: 0,
       // movePhotoFlg: true
-      photoWidth: '',
-      photoHeight: ''
-    }
+      photoWidth: "",
+      photoHeight: "",
+      testImg: ""
+    };
   },
-  beforeMount () {
-    var that = this
-    var localIds = window.localStorage.getItem('localIds')
-    if (!localIds) return
+  beforeMount() {
+    var that = this;
+    var localIds = window.localStorage.getItem("localIds");
+    if (!localIds) return;
     // var u = navigator.userAgent
     // var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //安卓端
     // var isIos = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
@@ -91,23 +99,30 @@ export default {
     wx.uploadImage({
       localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
       isShowProgressTips: 1, // 默认为1，显示进度提示
-      success: function (respons) {
+      success: function(respons) {
         // 返回图片的服务器端ID
-        that.axios.get(`http://coach.realmshow.com/api/webchat-api/file/upload?media_id=${respons.serverId}`).then((res) => {
-          if (res.data.code === 200) {
-            console.log('res', res)
-            var content = _parseJSON(res.data.data)
-            var ourImg = content.url
-            that.localIds = ourImg
-          }
-        }).catch((response) => {
-          console.log(response)
-        })
+        that.axios
+          .get(
+            `http://coach.realmshow.com/api/webchat-api/file/upload?media_id=${
+              respons.serverId
+            }`
+          )
+          .then(res => {
+            if (res.data.code === 200) {
+              console.log("res", res);
+              var content = _parseJSON(res.data.data);
+              var ourImg = content.url;
+              that.localIds = ourImg;
+            }
+          })
+          .catch(response => {
+            console.log(response);
+          });
       }
-    })
+    });
   },
   methods: {
-    loadImg () {
+    loadImg() {
       // var img = new Image()
       // img.src = this.localIds
       // var imgWidth = img.width
@@ -124,11 +139,11 @@ export default {
       //   this.photoWidth = 'auto'
       // }
     },
-    goBack () {
-      this.$router.go(-1)
+    goBack() {
+      this.$router.go(-1);
     },
-    changeAlbum (album) {
-      this.albumImg = album
+    changeAlbum(album) {
+      this.albumImg = album;
     },
     // movePhoto () {
     //   console.log(111)
@@ -140,8 +155,8 @@ export default {
     //     this.photoIndex = 1000
     //   }
     // },
-    dealPhoto () {
-      var that = this
+    dealPhoto() {
+      var that = this;
       // that.photoIndex = 0
       // Indicator.open({
       //   text: '图片上传中，请稍后...',
@@ -164,26 +179,29 @@ export default {
         async: true,
         allowTaint: true,
         taintTest: true,
-        useCORS: true,
+        useCORS: true
         //dpi: window.devicePixelRatio
-      }).then((canvas) => {
-        console.log(canvas)
-        console.log(canvas.toDataURL())
-        this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
-        window.localStorage.setItem('firstImg', canvas.toDataURL())
-        this.$router.replace('/dealphoto')
-      })
+      }).then(canvas => {
+        console.log(canvas);
+        console.log(canvas.toDataURL());
+        this.imgUrl = URL.createObjectURL(
+          this.base64ToBlob(canvas.toDataURL())
+        );
+        window.localStorage.setItem("firstImg", canvas.toDataURL());
+        this.testImg = canvas.toDataURL()
+        this.$router.replace("/dealphoto");
+      });
     },
-    base64ToBlob (code) {
-      let parts = code.split(';base64,')
-      let contentType = parts[0].split(':')[1]
-      let raw = window.atob(parts[1])
-      let rawLength = raw.length
-      let uInt8Array = new Uint8Array(rawLength)
+    base64ToBlob(code) {
+      let parts = code.split(";base64,");
+      let contentType = parts[0].split(":")[1];
+      let raw = window.atob(parts[1]);
+      let rawLength = raw.length;
+      let uInt8Array = new Uint8Array(rawLength);
       for (let i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i)
+        uInt8Array[i] = raw.charCodeAt(i);
       }
-      return new Blob([uInt8Array], {type: contentType})
+      return new Blob([uInt8Array], { type: contentType });
     }
     /* 鼠标按下事件 */
     // onmousedown (event) {
@@ -260,7 +278,7 @@ export default {
     //   // this.photoIndex = 0
     // }
   }
-}
+};
 </script>
 
 <style scoped lang='scss'>
@@ -271,6 +289,14 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   overflow-x: hidden;
+
+  .sss {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 50px;
+      height: 80px;
+  }
   .choose-bg {
     position: relative;
     width: 100%;
@@ -382,7 +408,7 @@ export default {
       li {
         display: inline-block;
         img {
-          background-color: #D3D3D4;
+          background-color: #d3d3d4;
           width: 60px;
           margin: 0 5px;
         }

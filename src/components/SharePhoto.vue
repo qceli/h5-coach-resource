@@ -1,5 +1,5 @@
 <template>
-  <div class="deal-container">
+  <div class="deal-container" ref="boxz">
     <!--<div class="choose-bg">-->
     <!--<img src="../assets/images/page_bg@2x.png" />-->
     <!--</div>-->
@@ -7,23 +7,24 @@
       <div class="logo-img">
         <img src="../assets/images/logo@2x.png">
       </div>
-      <div>
+      <!-- <div> -->
         <div class="people-img" ref="box">
-          <img :src="secondImg" alt="分享背景图" @load="loadImg">
+          <!-- <img :src="secondImg" @load="loadImg"> -->
+          <img :src="cvsimg" alt="分享背景图" @load="loadImg">
           <div class="model-img">
             <img src="../assets/images/sign.png">
           </div>
         </div>
-        <div class="share-img" ref="sharebox">
-          <img :src="imgUrl" crossorigin="anonymous" alt="分享图">
-        </div>
-      </div>
+        <!-- <div v-show="fromshare" class="share-img" ref="sharebox">
+          <img :src="shareUrl" crossorigin="anonymous" alt="分享图">
+        </div> -->
+      <!-- </div> -->
     </div>
     <div class="note-text">
       <div>您到专属合影已生成</div>
       <div>点击右上角分享至朋友圈</div>
     </div>
-    <!-- <div @click="testImg">生成图片</div> -->
+    <img class="sss" :src="testImg" @click="test">
   </div>
 </template>
 
@@ -54,32 +55,34 @@ export default {
   data() {
     return {
       secondImg: "",
-      imgUrl: "",
-      params: ""
+      params: "",
+      fromshare: false,
+      shareUrl: "",
+      testImg: "",
+      cvsimg: require('../assets/images/album_1@2x.png')
     };
   },
   mounted() {
     var id = this.$route.query.id;
     // console.log(decodeURIComponent(params))
     if (!id) {
+      this.fromshare = true;
       var pageUrl = window.location.href;
       var index = pageUrl.lastIndexOf("url=");
       //var params = pageUrl.substring(index + 4, pageUrl.length)
       const queries = new UrlParameters() || {};
       const url = queries["url"];
       // alert(url);
-      this.$refs.box.style.display = "none";
-      this.imgUrl = url; //decodeURIComponent(params)
+      this.shareUrl = url; //decodeURIComponent(params)
       // this.shareInfo(pageUrl, params)
     } else {
-      this.$refs.sharebox.style.display = "none";
       var firstImg = window.localStorage.getItem("firstImg");
       if (!firstImg) {
+        alert("error");
         return;
       }
       this.secondImg = firstImg;
     }
-    // setTimeout(this.testImg, 3000)
   },
   methods: {
     shareInfo(link, imgUrl) {
@@ -104,15 +107,33 @@ export default {
           console.log(response);
         });
     },
+    test() {
+        alert("test")
+        this.loadImg()
+    },
     loadImg() {
-      console.log("loadImg");
-      // 做初始化动作
-      // var heightStyle = this.$refs.imgbox.style.height
-      // console.log('heightStyle:' + heightStyle)
-      // if (this.imgUrl) return
-      // setTimeout(this.testImg, 3000)
-      this.testImg();
-      // this.$refs.sharebox.style.height = heightStyle
+      var id = this.$route.query.id;
+      // console.log(decodeURIComponent(params))
+      if (id != 1) {
+        return;
+      }
+      alert("loadImg called")
+      html2canvas(this.$refs.boxz, {
+        async: true,
+        allowTaint: false,
+        taintTest: true,
+        useCORS: true
+        //dpi: window.devicePixelRatio
+      }).then(canvas => {
+        // console.log(canvas)
+        //console.log(canvas.toDataURL())
+        var lastImg = URL.createObjectURL(
+          this.base64ToBlob(canvas.toDataURL())
+        )
+        // v-show="!fromshare" 
+        this.testImg = lastImg // canvas.toDataURL();
+        this.getImgUrl(canvas.toDataURL());
+      });
     },
     base64ToBlob(code) {
       let parts = code.split(";base64,");
@@ -125,27 +146,6 @@ export default {
       }
       return new Blob([uInt8Array], { type: contentType });
     },
-    testImg() {
-      var that = this;
-      html2canvas(that.$refs.box, {
-        async: true,
-        allowTaint: true,
-        taintTest: true,
-        useCORS: true,
-        backgroundColor: null,
-        //dpi: window.devicePixelRatio
-      }).then(function(canvas) {
-        // console.log(canvas)
-        console.log(canvas.toDataURL());
-        var lastImg = URL.createObjectURL(
-          that.base64ToBlob(canvas.toDataURL())
-        );
-        that.imgUrl = lastImg;
-        that.$refs.box.style.display = "none";
-        that.$refs.sharebox.style.display = "";
-        that.getImgUrl(canvas.toDataURL());
-      });
-    },
     getImgUrl(baseImg) {
       var that = this;
       that.axios
@@ -155,23 +155,14 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             var content = _parseJSON(res.data.data);
-            that.imgUrl = content.url;
-            // var link = window.location.href
-
-            //   alert(location.origin)
-            //   alert(location.search)
-            //   alert(link)
-            //   alert(content.url)
+            that.shareUrl = content.url;
             var u = navigator.userAgent;
-
             var link = location.origin + "/h5";
             var imgurl = location.origin + "/h5/star.png";
-
             var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
             if (isAndroid) {
               //alert("android");
               link = link + "?" + "url=" + content.url + "#SharePhoto";
-              //alert(link)
               that.shareInfo(link, imgurl);
             } else {
               link = link + "?url=" + content.url + "#SharePhoto";
@@ -181,6 +172,7 @@ export default {
         })
         .catch(response => {
           console.log(response);
+          alert("getImgUrl(baseImg) error");
         });
     }
   }
@@ -197,6 +189,14 @@ export default {
   overflow-x: hidden;
   padding-top: 3rem;
   box-sizing: border-box;
+
+  .sss {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 50px;
+    height: 80px;
+  }
   .deal-content {
     .logo-img {
       text-align: center;
@@ -206,10 +206,18 @@ export default {
         width: 150px;
       }
     }
-    .people-img {
+    .starsigned {
       margin: 0 4rem;
       width: calc(100% - 8rem);
       line-height: 0;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .people-img {
+      margin: 0 4rem;
+      width: calc(100% - 8rem);
       img {
         width: 100%;
         height: 100%;
@@ -219,7 +227,6 @@ export default {
         position: relative;
         top: -10.5rem;
         right: 1.5rem;
-        line-height: 0;
         img {
           width: 5rem;
           height: 5rem;
@@ -234,7 +241,6 @@ export default {
       // margin-top: 2rem;
       width: calc(100% - 8rem);
       margin: 0 4rem;
-      line-height: 0;
       img {
         width: 100%;
         height: 100%;
