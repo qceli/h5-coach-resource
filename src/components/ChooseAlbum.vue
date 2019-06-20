@@ -368,7 +368,7 @@ export default {
         .model-img {
           position: absolute;
           right: 0.5rem;
-          top: 2rem;
+          top: 2.5rem;
           z-index: 99;
           background: transparent;
           img {
