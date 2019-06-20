@@ -50,7 +50,8 @@ export default {
   //overflow: hidden;
   background-image: url("../assets/images/home_bg_1@2x.jpg");
   background-repeat: no-repeat;
-  background-position: center;
+  //background-position: center;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   background-size: cover;
@@ -79,7 +80,7 @@ export default {
     }
     .home-button {
       position: absolute;
-      bottom: 65px;
+      bottom: 2%;
       text-align: center;
       z-index: 3;
       width: 100%;

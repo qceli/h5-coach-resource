@@ -8,23 +8,23 @@
         <img src="../assets/images/logo@2x.png">
       </div>
       <!-- <div> -->
-        <div class="people-img" ref="box">
-          <!-- <img :src="secondImg" @load="loadImg"> -->
-          <img :src="cvsimg" alt="分享背景图" @load="loadImg">
-          <div class="model-img">
-            <img src="../assets/images/sign.png">
-          </div>
+      <div v-show="!fromshare" class="people-img" ref="box">
+        <img crossorigin="anonymous" :src="secondImg" @load="loadImg">
+        <!-- <img :src="cvsimg" alt="分享背景图" @load="loadImg"> -->
+        <div crossorigin="anonymous" class="model-img">
+          <img crossorigin="anonymous" src="../assets/images/sign.png">
         </div>
-        <!-- <div v-show="fromshare" class="share-img" ref="sharebox">
-          <img :src="shareUrl" crossorigin="anonymous" alt="分享图">
-        </div> -->
+      </div>
+      <div v-show="fromshare" class="share-img" ref="sharebox">
+          <img crossorigin="anonymous" :src="shareUrl"  alt="分享图">
+      </div>
       <!-- </div> -->
     </div>
     <div class="note-text">
       <div>您到专属合影已生成</div>
       <div>点击右上角分享至朋友圈</div>
     </div>
-    <img class="sss" :src="testImg" @click="test">
+    <!-- <img class="sss" :src="testImg" @click="test"> -->
   </div>
 </template>
 
@@ -59,7 +59,7 @@ export default {
       fromshare: false,
       shareUrl: "",
       testImg: "",
-      cvsimg: require('../assets/images/album_1@2x.png')
+      cvsimg: require("../assets/images/album_1@2x.png")
     };
   },
   mounted() {
@@ -67,13 +67,26 @@ export default {
     // console.log(decodeURIComponent(params))
     if (!id) {
       this.fromshare = true;
-      var pageUrl = window.location.href;
-      var index = pageUrl.lastIndexOf("url=");
-      //var params = pageUrl.substring(index + 4, pageUrl.length)
-      const queries = new UrlParameters() || {};
-      const url = queries["url"];
-      // alert(url);
-      this.shareUrl = url; //decodeURIComponent(params)
+      let url = "";
+      var u = navigator.userAgent;
+      var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
+      var sharefromAddroid = window.location.href.indexOf("sourceandroid") > -1;
+      var sharefromIos = window.location.href.indexOf("sourceios") > -1;
+      if ((isAndroid || sharefromAddroid) && !sharefromIos) {
+        var pageUrl = window.location.href;
+        // alert(pageUrl)
+        var index = pageUrl.lastIndexOf("url=");
+        var params = pageUrl.substring(index + 4, pageUrl.length);
+        // alert(params)
+        url = decodeURIComponent(params);
+        //
+      } else {
+        const queries = new UrlParameters() || {};
+        url = queries["url"];
+        // alert(url)
+      }
+      // alert(url)
+      this.shareUrl = url;
       // this.shareInfo(pageUrl, params)
     } else {
       var firstImg = window.localStorage.getItem("firstImg");
@@ -108,8 +121,7 @@ export default {
         });
     },
     test() {
-        alert("test")
-        this.loadImg()
+      this.loadImg();
     },
     loadImg() {
       var id = this.$route.query.id;
@@ -117,8 +129,7 @@ export default {
       if (id != 1) {
         return;
       }
-      alert("loadImg called")
-      html2canvas(this.$refs.boxz, {
+      html2canvas(this.$refs.box, {
         async: true,
         allowTaint: false,
         taintTest: true,
@@ -129,9 +140,9 @@ export default {
         //console.log(canvas.toDataURL())
         var lastImg = URL.createObjectURL(
           this.base64ToBlob(canvas.toDataURL())
-        )
-        // v-show="!fromshare" 
-        this.testImg = lastImg // canvas.toDataURL();
+        );
+        // v-show="!fromshare"
+        this.testImg = lastImg; // canvas.toDataURL();
         this.getImgUrl(canvas.toDataURL());
       });
     },
@@ -162,10 +173,10 @@ export default {
             var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
             if (isAndroid) {
               //alert("android");
-              link = link + "?" + "url=" + content.url + "#SharePhoto";
+              link = link + "/#SharePhoto?&" + "&sourceandroid=1&url=" + content.url;
               that.shareInfo(link, imgurl);
             } else {
-              link = link + "?url=" + content.url + "#SharePhoto";
+              link = link + "?&sourceios=1&url=" + content.url + "#SharePhoto";
               that.shareInfo(link, imgurl);
             }
           }
