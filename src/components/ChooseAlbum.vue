@@ -51,9 +51,12 @@
 import html2canvas from "html2canvas";
 import { _parseJSON } from "../common/utils";
 import wx from "weixin-js-sdk";
+import $ from "jquery";
+import "jquery.panzoom";
 // import { setTimeout } from 'timers'
 // import { Indicator } from 'mint-ui'
 // import { initWechatJs } from '@/common/wechat'
+
 export default {
   name: "ChooseAlbum",
   data() {
@@ -77,6 +80,11 @@ export default {
       photoHeight: "",
       testImg: ""
     };
+  },
+  mounted () {
+    if ($('.upload-photo img').width() > 0)
+      this.setupPanzoom();
+    $('.upload-photo img').on("load", () => this.setupPanzoom());
   },
   beforeMount() {
     var that = this;
@@ -122,6 +130,18 @@ export default {
     });
   },
   methods: {
+    setupPanzoom() {
+      const img = $('.upload-photo img');
+      const container = img.parent();
+      const sx = container.width() / img.width();
+      const sy = container.height() / img.height();
+      console.log("s:", sx, sy);
+      img.panzoom({
+        contain: "invert",
+        minScale: Math.max(sx, sy),
+        maxScale: Math.max(sx, sy) * 5
+      }).panzoom("zoom", Math.max(sx, sy), { silent: true });
+    },
     loadImg() {
       // var img = new Image()
       // img.src = this.localIds
@@ -331,14 +351,17 @@ export default {
       .people-img {
         margin: 0 auto;
         width: 200px;
+        height: 297.4px;
         position: relative;
         overflow: hidden;
         .album-img-bg {
           position: relative;
           z-index: 999;
           line-height: 0;
+          pointer-events: none;
           img {
-            width: 200px;
+            width: 100%;
+            height: 100%;
           }
         }
         // .upload-photo {
@@ -369,11 +392,6 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
         }
         .model-img {
           position: absolute;
@@ -381,6 +399,7 @@ export default {
           top: 4rem;
           z-index: 99;
           background: transparent;
+          pointer-events: none;
           img {
             width: 7.5rem;
             background: transparent;
