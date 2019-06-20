@@ -13,7 +13,7 @@
           <!-- <div class="upload-photo"><img src="../assets/images/apply-bg@2x.png" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div> -->
           <!-- <div class="upload-photo"><img :src="localIds" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div>           -->
           <div class="upload-photo">
-            <img :src="localIds" @load="handleImgLoad"/>         
+            <img :src="localIds"/>         
           </div>
           <div class="model-img"><img src="../assets/images/star.png" /></div>
         </div>
@@ -140,19 +140,6 @@ export default {
     //     this.photoIndex = 1000
     //   }
     // },
-    handleImgLoad(e) {
-      const img = e.target;
-      const r1 = this.$refs.box.offsetWidth / this.$refs.box.offsetHeight;
-      const r2 = img.width / img.height;
-      
-      if (r2 < r1) {
-        img.width = this.$refs.box.offsetWidth;
-        img.height = img.width / r2;
-      } else {
-        img.height = this.$refs.box.offsetHeight;
-        img.width = img.height * r2;
-      }
-    },
     dealPhoto () {
       var that = this
       // that.photoIndex = 0
@@ -356,13 +343,10 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-          display: flex;
-          align-content: center;
-          align-items: center;
-          justify-content: center;
           img {
-            display: flex;
-            flex: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
         }
         .model-img {
