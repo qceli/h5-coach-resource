@@ -23,6 +23,7 @@
       <div>您到专属合影已生成</div>
       <div>点击右上角分享至朋友圈</div>
     </div>
+    <!-- <div @click="testImg">生成图片</div> -->
   </div>
 </template>
 
@@ -69,6 +70,7 @@ export default {
       // alert(url);
       this.$refs.box.style.display = "none";
       this.imgUrl = url; //decodeURIComponent(params)
+      // this.shareInfo(pageUrl, params)
     } else {
       this.$refs.sharebox.style.display = "none";
       var firstImg = window.localStorage.getItem("firstImg");
@@ -77,6 +79,7 @@ export default {
       }
       this.secondImg = firstImg;
     }
+    // setTimeout(this.testImg, 3000)
   },
   methods: {
     shareInfo(link, imgUrl) {
@@ -103,7 +106,12 @@ export default {
     },
     loadImg() {
       console.log("loadImg");
+      // 做初始化动作
+      // var heightStyle = this.$refs.imgbox.style.height
+      // console.log('heightStyle:' + heightStyle)
+      // if (this.imgUrl) return
       this.testImg();
+      // this.$refs.sharebox.style.height = heightStyle
     },
     base64ToBlob(code) {
       let parts = code.split(";base64,");
@@ -147,12 +155,27 @@ export default {
           if (res.data.code === 200) {
             var content = _parseJSON(res.data.data);
             that.imgUrl = content.url;
-            var u = navigator.userAgent;
-            var link = location.origin + "/h5?";
-            link = link + "url=" + content.url + "#SharePhoto";
+            // var link = window.location.href
 
+            //   alert(location.origin)
+            //   alert(location.search)
+            //   alert(link)
+            //   alert(content.url)
+            var u = navigator.userAgent;
+
+            var link = location.origin + "/h5";
             var imgurl = location.origin + "/h5/star.png"
-            that.shareInfo(link, imgurl);content.url
+            
+            var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
+            if (isAndroid) {
+              //alert("android");
+              link = link + "?" + "url=" + content.url + "#SharePhoto";
+              alert(link)
+              that.shareInfo(link, imgurl);
+            } else {
+                link = link + "?url=" + content.url + "#SharePhoto";
+                that.shareInfo(link, imgurl);
+            }
           }
         })
         .catch(response => {
