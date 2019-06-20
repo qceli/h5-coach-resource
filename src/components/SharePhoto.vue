@@ -110,6 +110,7 @@ export default {
       // var heightStyle = this.$refs.imgbox.style.height
       // console.log('heightStyle:' + heightStyle)
       // if (this.imgUrl) return
+      // setTimeout(this.testImg, 3000)
       this.testImg();
       // this.$refs.sharebox.style.height = heightStyle
     },
@@ -132,7 +133,7 @@ export default {
         taintTest: true,
         useCORS: true,
         backgroundColor: null,
-        dpi: window.devicePixelRatio
+        //dpi: window.devicePixelRatio
       }).then(function(canvas) {
         // console.log(canvas)
         console.log(canvas.toDataURL());
@@ -164,17 +165,17 @@ export default {
             var u = navigator.userAgent;
 
             var link = location.origin + "/h5";
-            var imgurl = location.origin + "/h5/star.png"
-            
+            var imgurl = location.origin + "/h5/star.png";
+
             var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
             if (isAndroid) {
               //alert("android");
               link = link + "?" + "url=" + content.url + "#SharePhoto";
-              alert(link)
+              //alert(link)
               that.shareInfo(link, imgurl);
             } else {
-                link = link + "?url=" + content.url + "#SharePhoto";
-                that.shareInfo(link, imgurl);
+              link = link + "?url=" + content.url + "#SharePhoto";
+              that.shareInfo(link, imgurl);
             }
           }
         })
