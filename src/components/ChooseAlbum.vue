@@ -132,7 +132,7 @@ export default {
               var content = _parseJSON(res.data.data);
               var ourImg = content.url;
               that.localIds = ourImg;
-              that.getImageSize();
+              // that.getImageSize();
             }
           })
           .catch(response => {
