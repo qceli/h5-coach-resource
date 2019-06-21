@@ -69,9 +69,9 @@ export default {
       // iX: 0, // 鼠标坐标 与 拖拽按钮 间距 x
       // iY: 0, // 鼠标坐标 与 拖拽按钮 间距 y
       albumArray: [
-        require("../assets/images/album_1@2x.png"),
-        require("../assets/images/album_2@2x.png"),
-        require("../assets/images/album_3@2x.png")
+        require("../assets/images/album_11@2x.png"),
+        require("../assets/images/album_22@2x.png"),
+        require("../assets/images/album_33@2x.png")
       ],
       albumImg: require("../assets/images/album_1@2x.png"),
 

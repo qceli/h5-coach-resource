@@ -30,6 +30,7 @@
 import { _parseJSON } from "../common/utils";
 import html2canvas from "html2canvas";
 import { initWechatJs } from "../common/wechat";
+import $ from "jquery";
 
 function UrlParameters() {
   let name, value;
