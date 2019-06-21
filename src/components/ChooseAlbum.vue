@@ -7,23 +7,24 @@
       <div class="logo-img">
         <img src="../assets/images/logo@2x.png">
       </div>
-
-      <!-- v-hammer:pan="onPan"
+<!-- 
+v-hammer:pan="onPan"
           v-hammer:panend="onPanend"
           v-hammer:pinch="pinchMove"
           v-hammer:pinchstart="pinchStart"
-      v-hammer:rotate="rotateFun"-->
+          v-hammer:rotate="rotateFun" -->
       <!-- localIds <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
       <div class="photo-img" ref="pageDiv">
-        <div class="people-img" ref="box" v-hammer:pan="onPan"
-          v-hammer:panend="onPanend"
-          v-hammer:pinch="pinchMove"
-          v-hammer:pinchstart="pinchStart">
+        <div
+          class="people-img"
+          ref="box"
+          
+        >
           <div class="album-img-bg">
             <img :src="albumImg">
           </div>
           <div class="upload-photo">
-            <img :src="localIds" ref="photo">
+            <img crossorigin="anonymous" :src="localIds" ref="photo">
           </div>
           <div class="model-img">
             <img src="../assets/images/star.png">
@@ -75,9 +76,9 @@ export default {
       ],
       albumImg: require("../assets/images/album_11@2x.png"),
 
-      ggwp: "http://pic37.nipic.com/20140113/8800276_184927469000_2.png",
-      //ggwp: "http://192.168.1.6:9999/b.png",
-      // photoIndex: 1000, 
+      // ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
+       ggwp: "http://192.168.1.6:9999/abc.jpeg",
+      // photoIndex: 1000,
       // photoLeft: 0,
       // photoTop: 0,
       // movePhotoFlg: true
@@ -93,8 +94,8 @@ export default {
     };
   },
   mounted() {
-    // if ($(".upload-photo img").width() > 0) this.setupPanzoom();
-    // $(".upload-photo img").on("load", () => this.setupPanzoom());
+    if ($(".upload-photo img").width() > 0) this.setupPanzoom();
+    $(".upload-photo img").on("load", () => this.setupPanzoom());
   },
   beforeMount() {
     var that = this;
@@ -175,18 +176,19 @@ export default {
       });
     },
     setupPanzoom() {
-      const img = $(".upload-photo img");
-      const container = img.parent();
-      const sx = container.width() / img.width();
-      const sy = container.height() / img.height();
-      console.log("s:", sx, sy);
-      img
-        .panzoom({
-          contain: "invert",
-          minScale: Math.max(sx, sy),
-          maxScale: Math.max(sx, sy) * 5
-        })
-        .panzoom("zoom", Math.max(sx, sy), { silent: true });
+        const img = $('.upload-photo img');
+        const container = img.parent();
+        const sx = container.width() / img.width();
+        const sy = container.height() / img.height();
+        const scale = Math.max(sx, sy);
+        console.log("s:", sx, sy);
+        img.panzoom("destroy");
+        img.panzoom({
+          contain: false,//"invert",
+          startTransform: scale < 1 ? `scale(${Math.max(scale, 1)}) translate(-50%, 0)` : `scale(${scale})`,
+          minScale: scale,
+          maxScale: scale * 5
+        });
     },
     loadImg() {
       // var img = new Image()
@@ -397,16 +399,17 @@ export default {
       .people-img {
         margin: 0 auto;
         width: 200px;
+        height: 297.4px;
         position: relative;
         overflow: hidden;
-
         .album-img-bg {
           position: relative;
           z-index: 999;
           line-height: 0;
-
+          pointer-events: none;
           img {
-            width: 200px;
+            width: 100%;
+            height: 100%;
           }
         }
         .upload-photo {
@@ -419,119 +422,41 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-
-        img {
-            position: absolute;
-            left: 0;
-            top: 0;
-          //width: 100%;
-        }
         //   img {
         //     position: absolute;
-        //     // left: 0;
-        //     // top: 0;
-        //     left: 50%;
-        //     top: 50%;
-        //     transform: translateY(-50%) translateX(-50%);
+        //     left: 0;
+        //     top: 0;
         //   }
+          //   img {
+          //     width: 100%;
+          //     height: 100%;
+          //   }
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
         }
-
         .model-img {
           position: absolute;
           right: 0.5rem;
           top: 4rem;
           z-index: 99;
           background: transparent;
-
+          pointer-events: none;
           img {
             width: 7.5rem;
             background: transparent;
           }
         }
       }
-
       .share-img {
         display: none;
         width: 100%;
         line-height: 0;
-
         img {
           width: 100%;
         }
       }
     }
-
-    // .photo-img {
-    //   .people-img {
-    //     margin: 0 auto;
-    //     width: 200px;
-    //     height: 297.4px;
-    //     position: relative;
-    //     overflow: hidden;
-    //     .album-img-bg {
-    //       position: relative;
-    //       z-index: 999;
-    //       line-height: 0;
-    //       pointer-events: none;
-    //       img {
-    //         width: 100%;
-    //         height: 100%;
-    //       }
-    //     }
-    //     // .upload-photo {
-    //     //   position: absolute;
-    //     //   overflow: hidden;
-    //     //   top: 0;
-    //     //   bottom: 0;
-    //     //   z-index: 0;
-    //     //   width: 200px;
-    //     //   text-align: center;
-    //     //   object-fit: cover;
-    //     //   img {
-    //     //     // width: 200px;
-    //     //     // position: absolute;
-    //     //     // top: 2px;
-    //     //     // left: 50%;
-    //     //     width: 100%;
-    //     //     height: 100%;
-    //     //   }
-    //     // }
-    //     .upload-photo {
-    //       position: absolute;
-    //       overflow: hidden;
-    //       top: 0;
-    //       bottom: 0;
-    //       z-index: 0;
-    //       background-size: cover;
-    //       background-position: center;
-    //       width: 100%;
-    //       height: 100%;
-    //       display: flex;
-    //       align-items: center;
-    //       justify-content: flex-start;
-    //     }
-    //     .model-img {
-    //       position: absolute;
-    //       right: 0.5rem;
-    //       top: 4rem;
-    //       z-index: 99;
-    //       background: transparent;
-    //       pointer-events: none;
-    //       img {
-    //         width: 7.5rem;
-    //         background: transparent;
-    //       }
-    //     }
-    //   }
-    //   .share-img {
-    //     display: none;
-    //     width: 100%;
-    //     line-height: 0;
-    //     img {
-    //       width: 100%;
-    //     }
-    //   }
-    // }
   }
   .album-text {
     margin: 17px auto 13px auto;
