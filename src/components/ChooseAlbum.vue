@@ -1,14 +1,21 @@
 <template>
   <div class="choose-container">
+    <!--<div class="choose-bg">-->
+    <!--<img src="../assets/images/page_bg@2x.png" />-->
+    <!--</div>-->
     <div class="choose-contant">
       <div class="logo-img">
         <img src="../assets/images/logo@2x.png">
       </div>
+      <!-- <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
       <div class="photo-img" ref="pageDiv">
         <div class="people-img" ref="box">
           <div class="album-img-bg">
             <img :src="albumImg">
           </div>
+          <!-- <div class="upload-photo" @touchmove="onmousemove($event)" @touchend="onmouseup($event)" :style="{'z-index': photoIndex}"><img :style="{'left:': photoLeft,'top': photoTop}" :src="localIds" draggable="true" alt="分享背景图" @touchstart="onmousedown($event)" ref='actionMgr'></div> -->
+          <!-- <div class="upload-photo"><img src="../assets/images/apply-bg@2x.png" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div> -->
+          <!-- <div class="upload-photo"><img :src="localIds" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div>           -->
           <div class="upload-photo">
             <img :src="localIds">
           </div>
@@ -16,6 +23,9 @@
             <img src="../assets/images/star.png">
           </div>
         </div>
+        <!-- <div class="share-img" ref="sharebox">
+          <img :src="imgUrl" crossorigin="anonymous" alt="分享图">
+        </div>-->
       </div>
     </div>
 
@@ -28,39 +38,72 @@
       </ul>
     </div>
     <div class="choose-button">
+      <!-- <button @click="movePhoto">{{movePhotoFlg? '确定' : '取消'}}</button> -->
       <div @click="goBack" class="btn-div">上一步</div>
       <div @click="dealPhoto" class="btn-div last">下一步</div>
     </div>
     <!-- <img class="sss" :src="testImg"> -->
+
   </div>
 </template>
 
 <script>
 import html2canvas from "html2canvas";
-import { _parseJSON, imgLoad } from "../common/utils";
+import { _parseJSON } from "../common/utils";
 import wx from "weixin-js-sdk";
+import $ from "jquery";
+import "jquery.panzoom";
+// import { setTimeout } from 'timers'
+// import { Indicator } from 'mint-ui'
+// import { initWechatJs } from '@/common/wechat'
+
 export default {
   name: "ChooseAlbum",
   data() {
     return {
       localIds: "",
       imgUrl: "",
+      // mousedownState: false, // 鼠标默认抬起
+      // iX: 0, // 鼠标坐标 与 拖拽按钮 间距 x
+      // iY: 0, // 鼠标坐标 与 拖拽按钮 间距 y
       albumArray: [
         require("../assets/images/album_1@2x.png"),
         require("../assets/images/album_2@2x.png"),
         require("../assets/images/album_3@2x.png")
       ],
       albumImg: require("../assets/images/album_1@2x.png"),
+      // photoIndex: 1000,
+      // photoLeft: 0,
+      // photoTop: 0,
+      // movePhotoFlg: true
       photoWidth: "",
       photoHeight: "",
-      testImg: "",
-      dpi: 1.5
+      testImg: ""
     };
+  },
+  mounted () {
+    if ($('.upload-photo img').width() > 0)
+      this.setupPanzoom();
+    $('.upload-photo img').on("load", () => this.setupPanzoom());
   },
   beforeMount() {
     var that = this;
     var localIds = window.localStorage.getItem("localIds");
     if (!localIds) return;
+    // var u = navigator.userAgent
+    // var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //安卓端
+    // var isIos = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+    // if (isIos) {
+    //   window.wx.getLocalImgData({
+    //     localId: localIds,
+    //     success: function (res) {
+    //       var localData = res.localData
+    //       that.localIds = localData
+    //     }
+    //   })
+    // } else {
+    //
+    // }
     wx.uploadImage({
       localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
       isShowProgressTips: 1, // 默认为1，显示进度提示
@@ -74,10 +117,10 @@ export default {
           )
           .then(res => {
             if (res.data.code === 200) {
+              console.log("res", res);
               var content = _parseJSON(res.data.data);
               var ourImg = content.url;
               that.localIds = ourImg;
-              that.getImageSize();
             }
           })
           .catch(response => {
@@ -87,11 +130,34 @@ export default {
     });
   },
   methods: {
-    getImageSize() {
-      // alert(this.localIds);
-      imgLoad(this.localIds, (w, h) => {
-        this.dpi = h / w;
-      });
+    setupPanzoom() {
+      const img = $('.upload-photo img');
+      const container = img.parent();
+      const sx = container.width() / img.width();
+      const sy = container.height() / img.height();
+      console.log("s:", sx, sy);
+      img.panzoom({
+        contain: "invert",
+        minScale: Math.max(sx, sy),
+        maxScale: Math.max(sx, sy) * 5
+      }).panzoom("zoom", Math.max(sx, sy), { silent: true });
+    },
+    loadImg() {
+      // var img = new Image()
+      // img.src = this.localIds
+      // var imgWidth = img.width
+      // var imgHeight = img.height
+      // alert('imgWidth:' + imgWidth)
+      // alert('imgHeight:' + imgHeight)
+      // if (imgHeight > imgWidth) {
+      //   alert(111)
+      //   this.photoWidth = '200px'
+      //   this.photoHeight = 'auto'
+      // } else {
+      //   alert(222)
+      //   this.photoHeight = this.$refs.box.clientHeight + 'px'
+      //   this.photoWidth = 'auto'
+      // }
     },
     goBack() {
       this.$router.go(-1);
@@ -99,25 +165,50 @@ export default {
     changeAlbum(album) {
       this.albumImg = album;
     },
+    // movePhoto () {
+    //   console.log(111)
+    //   var movePhotos = !this.movePhotoFlg
+    //   this.movePhotoFlg = movePhotos
+    //   if (!movePhotos) {
+    //     this.photoIndex = 0
+    //   } else {
+    //     this.photoIndex = 1000
+    //   }
+    // },
     dealPhoto() {
-      // alert(this.dpi);
+      var that = this;
+      // that.photoIndex = 0
+      // Indicator.open({
+      //   text: '图片上传中，请稍后...',
+      //   spinnerType: 'fading-circle'
+      // })
+      // setTimeout(html2canvas(that.$refs.box, {
+      //   async: true,
+      //   allowTaint: true,
+      //   taintTest: true,
+      //   useCORS: true
+      // }).then(function (canvas) {
+      //   console.log(canvas)
+      //   console.log(canvas.toDataURL())
+      //   that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+      //   window.localStorage.setItem('firstImg', canvas.toDataURL())
+      //   Indicator.close()
+      //   that.$router.push('/dealphoto')
+      // }), 3000)
       html2canvas(this.$refs.box, {
         async: true,
         allowTaint: true,
         taintTest: true,
-        useCORS: true,
-        scale: this.dpi,
-        width: 800,
-        height: 1200,
+        useCORS: true
+        //dpi: window.devicePixelRatio
       }).then(canvas => {
-
         console.log(canvas);
         console.log(canvas.toDataURL());
         this.imgUrl = URL.createObjectURL(
           this.base64ToBlob(canvas.toDataURL())
         );
         window.localStorage.setItem("firstImg", canvas.toDataURL());
-        this.testImg = canvas.toDataURL();
+        this.testImg = canvas.toDataURL()
         this.$router.replace("/dealphoto");
       });
     },
@@ -132,6 +223,80 @@ export default {
       }
       return new Blob([uInt8Array], { type: contentType });
     }
+    /* 鼠标按下事件 */
+    // onmousedown (event) {
+    //   console.log(event)
+    //   // this.photoIndex = 1000
+    //   /* 此处判断  pc 或 移动端 得到 event 事件 */
+    //   var touch
+    //   if (event.touches) {
+    //     touch = event.touches[0]
+    //   } else {
+    //     touch = event
+    //   }
+    //   // 鼠标点击 面向页面 的 x坐标 y坐标
+    //   let { clientX, clientY } = touch
+    //   // 鼠标x坐标 - 拖拽按钮x坐标  得到鼠标 距离 拖拽按钮 的间距
+    //   this.iX = clientX - this.$refs.actionMgr.offsetLeft
+    //   // 鼠标y坐标 - 拖拽按钮y坐标  得到鼠标 距离 拖拽按钮 的间距
+    //   this.iY = clientY - this.$refs.actionMgr.offsetTop
+    //   // 设置当前 状态为 鼠标按下
+    //   this.mousedownState = true
+    // },
+    // /* 鼠标移动事件 */
+    // onmousemove (event) {
+    //   // console.log(event)
+    //   // this.photoIndex = 1000
+    //   // 鼠标按下 切移动中
+    //   if (this.mousedownState) {
+    //     /* 此处判断  pc 或 移动端 得到 event 事件 */
+    //     var touch
+    //     if (event.touches) {
+    //       touch = event.touches[0]
+    //     } else {
+    //       touch = event
+    //     }
+    //     // 鼠标移动时 面向页面 的 x坐标 y坐标
+    //     let { clientX, clientY } = touch
+    //     // 当前页面全局容器 dom 元素  获取容器 宽高
+    //     let {
+    //       clientHeight: pageDivY,
+    //       clientWidth: pageDivX
+    //     } = this.$refs.pageDiv
+    //     /* 鼠标坐标 - 鼠标与拖拽按钮的 间距坐标  得到 拖拽按钮的 左上角 x轴y轴坐标 */
+    //     let [x, y] = [clientX - this.iX, clientY - this.iY]
+
+    //     // 拖拽按钮 dom 元素  获取 宽高 style 对象
+    //     let {
+    //       clientHeight: actionMgrY,
+    //       clientWidth: actionMgrX,
+    //       style: actionMgrStyle
+    //     } = this.$refs.actionMgr
+    //     // 此处判断 拖拽按钮 如果超出 屏幕宽高 或者 小于
+    //     // 设置 屏幕最大 x=全局容器x y=全局容器y 否则 设置 为 x=0 y=0
+    //     if (x > pageDivX - actionMgrX) x = pageDivX - actionMgrX
+    //     else if (x < 0) x = 0
+    //     if (y > pageDivY - actionMgrY) y = pageDivY - actionMgrY
+    //     else if (y < 0) y = 0
+    //     // 计算后坐标  设置 按钮位置
+    //     actionMgrStyle.left = `${x}px`
+    //     actionMgrStyle.top = `${y}px`
+    //     actionMgrStyle.bottom = 'auto'
+    //     actionMgrStyle.right = 'auto'
+    //     console.log(x, y)
+    //     this.photoLeft = x + 'px'
+    //     this.photoTop = y + 'px'
+    //     // 当按下键滑动时阻止屏幕滑动事件
+    //     //event.preventDefault()
+    //   }
+    // },
+    // /* 鼠标抬起事件 */
+    // onmouseup (event) {
+    //   console.log(event)
+    //   // 设置当前状态为鼠标抬起
+    //   this.mousedownState = false
+    //   // this.photoIndex = 0
+    // }
   }
 };
 </script>
@@ -146,11 +311,11 @@ export default {
   overflow-x: hidden;
 
   .sss {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 50px;
-    height: 80px;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 50px;
+      height: 80px;
   }
   .choose-bg {
     position: relative;
@@ -164,6 +329,10 @@ export default {
   }
   .choose-contant {
     padding-top: 2rem;
+    /*position: absolute;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*top: 0;*/
     box-sizing: border-box;
     .logo-img {
       margin: 0 auto 1.5rem 0;
@@ -182,16 +351,37 @@ export default {
       .people-img {
         margin: 0 auto;
         width: 200px;
+        height: 297.4px;
         position: relative;
         overflow: hidden;
         .album-img-bg {
           position: relative;
           z-index: 999;
           line-height: 0;
+          pointer-events: none;
           img {
-            width: 200px;
+            width: 100%;
+            height: 100%;
           }
         }
+        // .upload-photo {
+        //   position: absolute;
+        //   overflow: hidden;
+        //   top: 0;
+        //   bottom: 0;
+        //   z-index: 0;
+        //   width: 200px;
+        //   text-align: center;
+        //   object-fit: cover;
+        //   img {
+        //     // width: 200px;
+        //     // position: absolute;
+        //     // top: 2px;
+        //     // left: 50%;
+        //     width: 100%;
+        //     height: 100%;
+        //   }
+        // }
         .upload-photo {
           position: absolute;
           overflow: hidden;
@@ -202,11 +392,6 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
         }
         .model-img {
           position: absolute;
@@ -214,6 +399,7 @@ export default {
           top: 4rem;
           z-index: 99;
           background: transparent;
+          pointer-events: none;
           img {
             width: 7.5rem;
             background: transparent;
@@ -249,7 +435,10 @@ export default {
     }
   }
   .choose-button {
+    // margin: 0 3rem 2rem 3rem;
+    /*margin: 0 1rem 2rem 1rem;*/
     text-align: center;
+    // width: calc(100% - 6rem);
     width: 100%;
     display: flex;
     justify-content: center;
