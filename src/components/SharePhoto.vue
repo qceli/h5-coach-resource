@@ -58,7 +58,7 @@ export default {
       fromshare: false,
       shareUrl: "",
       testImg: "",
-      cvsimg: require("../assets/images/album_1@2x.png")
+      cvsimg: require("../assets/images/album_11@2x.png")
     };
   },
   mounted() {

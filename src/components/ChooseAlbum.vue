@@ -73,7 +73,7 @@ export default {
         require("../assets/images/album_22@2x.png"),
         require("../assets/images/album_33@2x.png")
       ],
-      albumImg: require("../assets/images/album_1@2x.png"),
+      albumImg: require("../assets/images/album_11@2x.png"),
 
       ggwp: "http://pic37.nipic.com/20140113/8800276_184927469000_2.png",
       //ggwp: "http://192.168.1.6:9999/b.png",
