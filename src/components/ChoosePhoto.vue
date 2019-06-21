@@ -1,10 +1,11 @@
 <template>
   <div class="choose-container">
-    <!-- <div class="choose-bg">
-      <img src="../assets/images/page_bg@2x.jpg" />
-    </div> -->
-    <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
-    <div class="camera-img"><img src="../assets/images/take_photo@2x.png" /></div>
+    <div class="logo-img">
+      <img src="../assets/images/logo@2x.png">
+    </div>
+    <div class="camera-img">
+      <img src="../assets/images/take_photo@2x.png">
+    </div>
     <div class="choose-button">
       <div @click="openAlbum(1)" class="btn-div">上传照片</div>
       <div @click="openAlbum(2)" class="btn-div">摄像头</div>
@@ -13,45 +14,51 @@
 </template>
 
 <script>
-import {openCameraForPic, initWechatJs} from '../common/wechat'
-import { _parseJSON } from '../common/utils'
+import { openCameraForPic, initWechatJs } from "../common/wechat";
+import { _parseJSON } from "../common/utils";
 export default {
-  name: 'ChoosePhoto',
-  data () {
-    return {
-    }
+  name: "ChoosePhoto",
+  data() {
+    return {};
   },
-  mounted () {
-  },
-  beforeRouteEnter (to, from, next) {
+  mounted() {},
+  beforeRouteEnter(to, from, next) {
     next(vm => {
-      console.log('ChoosePhoto activited')
-      vm.initWechatJsex()
-    })
+      console.log("ChoosePhoto activited");
+      vm.initWechatJsex();
+    });
   },
   methods: {
-    initWechatJsex () {
-      this.axios.post('http://coach.realmshow.com/api/webchat-api/pub/signature').then((res) => {
-        if (res.data.code === 200) {
-          var wechatSign = _parseJSON(res.data.data)
-          console.log(wechatSign)
-          initWechatJs(wechatSign.appId, wechatSign.nonce, wechatSign.timestamp, wechatSign.signature)
-        }
-      }).catch((response) => {
-        console.log(response)
-      })
+    initWechatJsex() {
+      this.axios
+        .post("http://coach.realmshow.com/api/webchat-api/pub/signature")
+        .then(res => {
+          if (res.data.code === 200) {
+            var wechatSign = _parseJSON(res.data.data);
+            console.log(wechatSign);
+            initWechatJs(
+              wechatSign.appId,
+              wechatSign.nonce,
+              wechatSign.timestamp,
+              wechatSign.signature
+            );
+          }
+        })
+        .catch(response => {
+          console.log(response);
+        });
     },
-    openAlbum (type) {
-      var that = this
-      console.log('openAlbum')
-      openCameraForPic(type, function (localIds) {
-        console.log(localIds[0])
-        window.localStorage.setItem('localIds', (localIds[0]))
-        that.$router.push('/choosealbum')
-      })
+    openAlbum(type) {
+      var that = this;
+      console.log("openAlbum");
+      openCameraForPic(type, function(localIds) {
+        console.log(localIds[0]);
+        window.localStorage.setItem("localIds", localIds[0]);
+        that.$router.push("/choosealbum");
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -65,16 +72,6 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   background-size: cover;
-//   .choose-bg {
-//     position: relative;
-//     width: 100%;
-//     height: 100%;
-//     z-index: -999;
-//     img {
-//       width: 100%;
-//       height: 100%;
-//     }
-//   }
   .logo-img {
     position: absolute;
     top: 3rem;

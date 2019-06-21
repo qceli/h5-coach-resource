@@ -16,7 +16,7 @@
         </div>
       </div>
       <div v-show="fromshare" class="share-img" ref="sharebox">
-          <img crossorigin="anonymous" :src="shareUrl"  alt="分享图">
+        <img crossorigin="anonymous" :src="shareUrl" alt="分享图">
       </div>
       <!-- </div> -->
     </div>
@@ -173,7 +173,8 @@ export default {
             var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; // 安卓端
             if (isAndroid) {
               //alert("android");
-              link = link + "/#SharePhoto?&" + "&sourceandroid=1&url=" + content.url;
+              link =
+                link + "/#SharePhoto?&" + "&sourceandroid=1&url=" + content.url;
               that.shareInfo(link, imgurl);
             } else {
               link = link + "?&sourceios=1&url=" + content.url + "#SharePhoto";

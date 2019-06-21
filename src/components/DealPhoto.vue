@@ -1,14 +1,12 @@
 <template>
   <div class="deal-container">
-    <!--<div class="choose-bg">-->
-      <!--<img src="../assets/images/page_bg@2x.png" />-->
-    <!--</div>-->
     <div class="deal-content">
-      <div class="logo-img"><img src="../assets/images/logo@2x.png" /></div>
+      <div class="logo-img">
+        <img src="../assets/images/logo@2x.png">
+      </div>
       <div>
         <div class="people-img" ref="box">
           <img :src="secondImg" alt="分享背景图">
-          <!-- <div class="model-img"><img src="../assets/images/sign.png" /></div> -->
         </div>
       </div>
     </div>
@@ -22,50 +20,45 @@
 
 <script>
 export default {
-  name: 'DealPhoto',
-  data () {
+  name: "DealPhoto",
+  data() {
     return {
-      secondImg: ''
-    }
+      secondImg: ""
+    };
   },
-  watch: {
-    // imgUrl (val, oldval) {
-    //   this.$refs.box.style.display = 'none'
-    //   this.$refs.sharebox.style.display = ''
-    // }
-  },
-  mounted () {
-    var firstImg = window.localStorage.getItem('firstImg')
+  watch: {},
+  mounted() {
+    var firstImg = window.localStorage.getItem("firstImg");
     if (!firstImg) {
-      return
+      return;
     }
-    this.secondImg = firstImg
+    this.secondImg = firstImg;
   },
   methods: {
-    goBack () {
-      this.$router.go(-1)
+    goBack() {
+      this.$router.go(-1);
     },
-    dealPhoto () {
+    dealPhoto() {
       this.$router.push({
-        path: '/sharephoto',
+        path: "/sharephoto",
         query: {
           id: 1
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped lang='scss'>
 .deal-container {
-    width: 100%;
-    background-image: url(../assets/images/page_bg@2x.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    height: 100%;
+  width: 100%;
+  background-image: url(../assets/images/page_bg@2x.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  height: 100%;
   .deal-content {
     .logo-img {
       text-align: center;
@@ -99,14 +92,6 @@ export default {
         }
       }
     }
-    // .share-img {
-    //   display: none;
-    //   width: 100%;
-    //   line-height: 0;
-    //   img {
-    //     width: 100%;
-    //   }
-    // }
   }
   .choose-button {
     margin: 2rem 0;
