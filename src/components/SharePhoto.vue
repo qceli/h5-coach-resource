@@ -11,9 +11,7 @@
       <div v-show="!fromshare" class="people-img" ref="box">
         <img crossorigin="anonymous" :src="secondImg" @load="loadImg">
         <!-- <img :src="cvsimg" alt="分享背景图" @load="loadImg"> -->
-        <div crossorigin="anonymous" class="model-img">
-          <img crossorigin="anonymous" src="../assets/images/sign.png">
-        </div>
+        
       </div>
       <div v-show="fromshare" class="share-img" ref="sharebox">
         <img crossorigin="anonymous" :src="shareUrl" alt="分享图">
@@ -129,21 +127,40 @@ export default {
       if (id != 1) {
         return;
       }
-      html2canvas(this.$refs.box, {
-        async: true,
-        allowTaint: false,
-        taintTest: true,
-        useCORS: true
-        //dpi: window.devicePixelRatio
+
+      const loadImage = aSrc => {
+        const img = new Image();
+        const p = new Promise((resolve, reject) => {
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+        });
+        img.src = aSrc;
+        return p;
+      };
+
+      Promise.all([
+        loadImage(this.secondImg),
+        loadImage(require("../assets/images/sign.png"))
+      ]).then(([img, sig]) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const sigsize = canvas.width * 0.4;
+        const offx = canvas.width * 0.1 + sigsize;
+        const offy = canvas.height * 0.1 + sigsize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(sig, canvas.width - offx, canvas.height - offy, sigsize, sigsize);
+        return canvas;
       }).then(canvas => {
-        // console.log(canvas)
-        //console.log(canvas.toDataURL())
         var lastImg = URL.createObjectURL(
           this.base64ToBlob(canvas.toDataURL())
         );
-        // v-show="!fromshare"
-        this.testImg = lastImg; // canvas.toDataURL();
+        this.secondImg = lastImg;
+        this.testImg = lastImg;
         this.getImgUrl(canvas.toDataURL());
+      }).catch(e => {
+        console.log(e);
       });
     },
     base64ToBlob(code) {
