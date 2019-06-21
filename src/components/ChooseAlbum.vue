@@ -24,7 +24,7 @@ v-hammer:pan="onPan"
             <img :src="albumImg">
           </div>
           <div class="upload-photo">
-            <img :src="localIds" ref="photo">
+            <img crossorigin="anonymous" :src="localIds" ref="photo">
           </div>
           <div class="model-img">
             <img src="../assets/images/star.png">
@@ -76,8 +76,8 @@ export default {
       ],
       albumImg: require("../assets/images/album_1@2x.png"),
 
-      //ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
-       ggwp: "http://192.168.1.6:9999/b.png",
+      // ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
+       ggwp: "http://192.168.1.6:9999/abc.jpeg",
       // photoIndex: 1000,
       // photoLeft: 0,
       // photoTop: 0,
