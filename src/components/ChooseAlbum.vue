@@ -1,30 +1,23 @@
 <template>
   <div class="choose-container">
-    <!--<div class="choose-bg">-->
-    <!--<img src="../assets/images/page_bg@2x.png" />-->
-    <!--</div>-->
     <div class="choose-contant">
       <div class="logo-img">
         <img src="../assets/images/logo@2x.png">
       </div>
-<!-- 
-v-hammer:pan="onPan"
+      <!-- 
+          v-hammer:pan="onPan"
           v-hammer:panend="onPanend"
           v-hammer:pinch="pinchMove"
           v-hammer:pinchstart="pinchStart"
-          v-hammer:rotate="rotateFun" -->
+          v-hammer:rotate="rotateFun"-->
       <!-- localIds <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
       <div class="photo-img" ref="pageDiv">
-        <div
-          class="people-img"
-          ref="box"
-          
-        >
+        <div class="people-img" ref="box">
           <div class="album-img-bg">
             <img :src="albumImg">
           </div>
           <div class="upload-photo">
-            <img crossorigin="anonymous" :src="localIds" ref="photo">
+            <img crossorigin="anonymous" :src="ggwp" ref="photo">
           </div>
           <div class="model-img">
             <img src="../assets/images/star.png">
@@ -76,8 +69,8 @@ export default {
       ],
       albumImg: require("../assets/images/album_1@2x.png"),
 
-      // ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
-       ggwp: "http://192.168.1.6:9999/abc.jpeg",
+      ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
+      // ggwp: "http://192.168.1.6:9999/abc.jpeg",
       // photoIndex: 1000,
       // photoLeft: 0,
       // photoTop: 0,
@@ -101,20 +94,6 @@ export default {
     var that = this;
     var localIds = window.localStorage.getItem("localIds");
     if (!localIds) return;
-    // var u = navigator.userAgent
-    // var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //安卓端
-    // var isIos = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
-    // if (isIos) {
-    //   window.wx.getLocalImgData({
-    //     localId: localIds,
-    //     success: function (res) {
-    //       var localData = res.localData
-    //       that.localIds = localData
-    //     }
-    //   })
-    // } else {
-    //
-    // }
     wx.uploadImage({
       localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
       isShowProgressTips: 1, // 默认为1，显示进度提示
@@ -176,33 +155,18 @@ export default {
       });
     },
     setupPanzoom() {
-        const img = $('.upload-photo img');
-        const container = img.parent();
-        const sx = container.width() / img.width();
-        const sy = container.height() / img.height();
-        console.log("s:", sx, sy);
-        img.panzoom({
+      const img = $(".upload-photo img");
+      const container = img.parent();
+      const sx = container.width() / img.width();
+      const sy = container.height() / img.height();
+      console.log("s:", sx, sy);
+      img
+        .panzoom({
           contain: "invert",
           minScale: Math.max(sx, sy),
           maxScale: Math.max(sx, sy) * 5
-        }).panzoom("zoom", Math.max(sx, sy), { silent: true });
-    },
-    loadImg() {
-      // var img = new Image()
-      // img.src = this.localIds
-      // var imgWidth = img.width
-      // var imgHeight = img.height
-      // alert('imgWidth:' + imgWidth)
-      // alert('imgHeight:' + imgHeight)
-      // if (imgHeight > imgWidth) {
-      //   alert(111)
-      //   this.photoWidth = '200px'
-      //   this.photoHeight = 'auto'
-      // } else {
-      //   alert(222)
-      //   this.photoHeight = this.$refs.box.clientHeight + 'px'
-      //   this.photoWidth = 'auto'
-      // }
+        })
+        .panzoom("zoom", Math.max(sx, sy), { silent: true });
     },
     goBack() {
       this.$router.go(-1);
@@ -210,36 +174,8 @@ export default {
     changeAlbum(album) {
       this.albumImg = album;
     },
-    // movePhoto () {
-    //   console.log(111)
-    //   var movePhotos = !this.movePhotoFlg
-    //   this.movePhotoFlg = movePhotos
-    //   if (!movePhotos) {
-    //     this.photoIndex = 0
-    //   } else {
-    //     this.photoIndex = 1000
-    //   }
-    // },
     dealPhoto() {
       var that = this;
-      // that.photoIndex = 0
-      // Indicator.open({
-      //   text: '图片上传中，请稍后...',
-      //   spinnerType: 'fading-circle'
-      // })
-      // setTimeout(html2canvas(that.$refs.box, {
-      //   async: true,
-      //   allowTaint: true,
-      //   taintTest: true,
-      //   useCORS: true
-      // }).then(function (canvas) {
-      //   console.log(canvas)
-      //   console.log(canvas.toDataURL())
-      //   that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-      //   window.localStorage.setItem('firstImg', canvas.toDataURL())
-      //   Indicator.close()
-      //   that.$router.push('/dealphoto')
-      // }), 3000)
       html2canvas(this.$refs.box, {
         async: true,
         allowTaint: true,
@@ -268,80 +204,6 @@ export default {
       }
       return new Blob([uInt8Array], { type: contentType });
     }
-    /* 鼠标按下事件 */
-    // onmousedown (event) {
-    //   console.log(event)
-    //   // this.photoIndex = 1000
-    //   /* 此处判断  pc 或 移动端 得到 event 事件 */
-    //   var touch
-    //   if (event.touches) {
-    //     touch = event.touches[0]
-    //   } else {
-    //     touch = event
-    //   }
-    //   // 鼠标点击 面向页面 的 x坐标 y坐标
-    //   let { clientX, clientY } = touch
-    //   // 鼠标x坐标 - 拖拽按钮x坐标  得到鼠标 距离 拖拽按钮 的间距
-    //   this.iX = clientX - this.$refs.actionMgr.offsetLeft
-    //   // 鼠标y坐标 - 拖拽按钮y坐标  得到鼠标 距离 拖拽按钮 的间距
-    //   this.iY = clientY - this.$refs.actionMgr.offsetTop
-    //   // 设置当前 状态为 鼠标按下
-    //   this.mousedownState = true
-    // },
-    // /* 鼠标移动事件 */
-    // onmousemove (event) {
-    //   // console.log(event)
-    //   // this.photoIndex = 1000
-    //   // 鼠标按下 切移动中
-    //   if (this.mousedownState) {
-    //     /* 此处判断  pc 或 移动端 得到 event 事件 */
-    //     var touch
-    //     if (event.touches) {
-    //       touch = event.touches[0]
-    //     } else {
-    //       touch = event
-    //     }
-    //     // 鼠标移动时 面向页面 的 x坐标 y坐标
-    //     let { clientX, clientY } = touch
-    //     // 当前页面全局容器 dom 元素  获取容器 宽高
-    //     let {
-    //       clientHeight: pageDivY,
-    //       clientWidth: pageDivX
-    //     } = this.$refs.pageDiv
-    //     /* 鼠标坐标 - 鼠标与拖拽按钮的 间距坐标  得到 拖拽按钮的 左上角 x轴y轴坐标 */
-    //     let [x, y] = [clientX - this.iX, clientY - this.iY]
-
-    //     // 拖拽按钮 dom 元素  获取 宽高 style 对象
-    //     let {
-    //       clientHeight: actionMgrY,
-    //       clientWidth: actionMgrX,
-    //       style: actionMgrStyle
-    //     } = this.$refs.actionMgr
-    //     // 此处判断 拖拽按钮 如果超出 屏幕宽高 或者 小于
-    //     // 设置 屏幕最大 x=全局容器x y=全局容器y 否则 设置 为 x=0 y=0
-    //     if (x > pageDivX - actionMgrX) x = pageDivX - actionMgrX
-    //     else if (x < 0) x = 0
-    //     if (y > pageDivY - actionMgrY) y = pageDivY - actionMgrY
-    //     else if (y < 0) y = 0
-    //     // 计算后坐标  设置 按钮位置
-    //     actionMgrStyle.left = `${x}px`
-    //     actionMgrStyle.top = `${y}px`
-    //     actionMgrStyle.bottom = 'auto'
-    //     actionMgrStyle.right = 'auto'
-    //     console.log(x, y)
-    //     this.photoLeft = x + 'px'
-    //     this.photoTop = y + 'px'
-    //     // 当按下键滑动时阻止屏幕滑动事件
-    //     //event.preventDefault()
-    //   }
-    // },
-    // /* 鼠标抬起事件 */
-    // onmouseup (event) {
-    //   console.log(event)
-    //   // 设置当前状态为鼠标抬起
-    //   this.mousedownState = false
-    //   // this.photoIndex = 0
-    // }
   }
 };
 </script>
@@ -419,18 +281,18 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-        //   img {
-        //     position: absolute;
-        //     left: 0;
-        //     top: 0;
-        //   }
+          //   img {
+          //     position: absolute;
+          //     left: 0;
+          //     top: 0;
+          //   }
           //   img {
           //     width: 100%;
           //     height: 100%;
           //   }
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
         }
         .model-img {
           position: absolute;
