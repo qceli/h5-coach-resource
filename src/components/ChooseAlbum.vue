@@ -7,10 +7,12 @@
       <div class="logo-img">
         <img src="../assets/images/logo@2x.png">
       </div>
+
+       <!-- v-hammer:pan="onPan" v-hammer:panend="onPanend" v-hammer:pinch="pinchMove" -->
+             <!-- v-hammer:pinchstart="pinchStart" v-hammer:rotate="rotateFun" -->
       <!-- <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
       <div class="photo-img" ref="pageDiv">
-        <div class="people-img" ref="box" v-hammer:pan="onPan" v-hammer:panend="onPanend" v-hammer:pinch="pinchMove"
-             v-hammer:pinchstart="pinchStart" v-hammer:rotate="rotateFun">
+        <div class="people-img" ref="box">
           <div class="album-img-bg">
             <img :src="albumImg">
           </div>
@@ -446,15 +448,18 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
-          img {
-              position: absolute;
-              left: 0;
-              top: 0;
-            }
+        //   img {
+        //       position: absolute;
+        //       left: 0;
+        //       top: 0;
+        //     }
         //   img {
         //     width: 100%;
         //     height: 100%;
         //   }
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
         }
         .model-img {
           position: absolute;
