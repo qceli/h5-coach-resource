@@ -8,6 +8,8 @@ import 'mint-ui/lib/style.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import { VueHammer } from "vue2-hammer";
+Vue.use(VueHammer);
 Vue.use(MintUI)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false

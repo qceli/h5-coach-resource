@@ -9,13 +9,11 @@
       </div>
       <!-- <div class="test-img" ref="testImg"><img :src="localIds" alt="" @load="loadImg"></div> -->
       <div class="photo-img" ref="pageDiv">
-        <div class="people-img" ref="box">
+        <div class="people-img" ref="box" v-hammer:pan="onPan" v-hammer:panend="onPanend" v-hammer:pinch="pinchMove"
+             v-hammer:pinchstart="pinchStart" v-hammer:rotate="rotateFun">
           <div class="album-img-bg">
             <img :src="albumImg">
           </div>
-          <!-- <div class="upload-photo" @touchmove="onmousemove($event)" @touchend="onmouseup($event)" :style="{'z-index': photoIndex}"><img :style="{'left:': photoLeft,'top': photoTop}" :src="localIds" draggable="true" alt="分享背景图" @touchstart="onmousedown($event)" ref='actionMgr'></div> -->
-          <!-- <div class="upload-photo"><img src="../assets/images/apply-bg@2x.png" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div> -->
-          <!-- <div class="upload-photo"><img :src="localIds" :style="{'width': photoWidth, 'height': photoHeight}" alt="分享背景图" ref='actionMgr'></div>           -->
           <div class="upload-photo">
             <img :src="localIds">
           </div>
@@ -23,9 +21,6 @@
             <img src="../assets/images/star.png">
           </div>
         </div>
-        <!-- <div class="share-img" ref="sharebox">
-          <img :src="imgUrl" crossorigin="anonymous" alt="分享图">
-        </div>-->
       </div>
     </div>
 
@@ -43,13 +38,12 @@
       <div @click="dealPhoto" class="btn-div last">下一步</div>
     </div>
     <!-- <img class="sss" :src="testImg"> -->
-
   </div>
 </template>
 
 <script>
 import html2canvas from "html2canvas";
-import { _parseJSON } from "../common/utils";
+import { _parseJSON, imgLoad } from "../common/utils";
 import wx from "weixin-js-sdk";
 import $ from "jquery";
 import "jquery.panzoom";
@@ -78,13 +72,14 @@ export default {
       // movePhotoFlg: true
       photoWidth: "",
       photoHeight: "",
-      testImg: ""
+      testImg: "",
+      imgw: 420,
+      imgH: 620
     };
   },
-  mounted () {
-    if ($('.upload-photo img').width() > 0)
-      this.setupPanzoom();
-    $('.upload-photo img').on("load", () => this.setupPanzoom());
+  mounted() {
+    if ($(".upload-photo img").width() > 0) this.setupPanzoom();
+    $(".upload-photo img").on("load", () => this.setupPanzoom());
   },
   beforeMount() {
     var that = this;
@@ -121,6 +116,7 @@ export default {
               var content = _parseJSON(res.data.data);
               var ourImg = content.url;
               that.localIds = ourImg;
+              that.getImageSize();
             }
           })
           .catch(response => {
@@ -130,17 +126,75 @@ export default {
     });
   },
   methods: {
+    onPan (event) {
+      this.deltaX = event.deltaX
+      this.deltaY = event.deltaY
+      this.$refs.photo.style.transform = `translate(${this.deltaX}px,${this.deltaY}px) scale(${this.dataZoom})`
+    },
+    onPanend (event) {
+      const photoLeft = Number(this.$refs.photo.style.left.slice(0, -2))
+      const photoTop = Number(this.$refs.photo.style.top.slice(0, -2))
+      this.$refs.photo.style.left = this.deltaX + photoLeft + 'px'
+      this.$refs.photo.style.top = this.deltaY + photoTop + 'px'
+      this.$refs.photo.style.transform = `translate(0px,0px) scale(${this.dataZoom})`
+    },
+    pinchMove (event) {
+      this.dataZoom = this.scaleIndex * event.scale
+      this.$refs.photo.style.transform = 'scale(' + this.dataZoom + ')'
+    },
+    pinchStart (event) {
+      this.scaleIndex = this.dataZoom || 1
+    },
+    rotateFun (e) {
+      console.log(e, '旋转')
+    },
+    getImageSize() {
+      imgLoad(this.imgUrl, (w, h) => {
+        this.imgw = w;
+        this.imgH = h;
+        this.setupPanzoom();
+      });
+    },
     setupPanzoom() {
       const img = $('.upload-photo img');
-      const container = img.parent();
-      const sx = container.width() / img.width();
-      const sy = container.height() / img.height();
-      console.log("s:", sx, sy);
-      img.panzoom({
-        contain: "invert",
-        minScale: Math.max(sx, sy),
-        maxScale: Math.max(sx, sy) * 5
-      }).panzoom("zoom", Math.max(sx, sy), { silent: true });
+
+
+    //   const container = img.parent();
+    //   const sx = container.width() / img.width();
+    //   const sy = container.height() / img.height();
+    //   console.log("s:", sx, sy);
+    //   img.panzoom({
+    //     contain: "invert",
+    //     minScale: Math.max(sx, sy),
+    //     maxScale: Math.max(sx, sy) * 5
+    //   }).panzoom("zoom", Math.max(sx, sy), { silent: true });
+
+      // alert(this.imgw)
+      //   const img = $(".upload-photo img");
+      //   const container = img.parent();
+      //   const containerwidth = container.width();
+      //   const containerheight = container.height();
+
+    //   img.panzoom({
+    //     cursor: "move",
+    //     disablePan: false,
+    //     disableZoom: false,
+    //     disableXAxis: false,
+    //     disableYAxis: false,
+    //     which: 1,
+    //     increment: 0.08,
+    //     linearZoom: false,
+    //     panOnlyWhenZoomed: false,
+    //     minScale: 0.3,
+    //     maxScale: 3,
+    //     rangeStep: 0.3,
+    //     duration: 100,
+    //     easing: "ease-in-out",
+    //     contain: false, // 'invert', //
+    //     transition: false
+    //   })
+       // .panzoom("zoom", 1, { silent: true });
+      //.panzoom("zoom", 0.5, { silent: true });
     },
     loadImg() {
       // var img = new Image()
@@ -208,7 +262,7 @@ export default {
           this.base64ToBlob(canvas.toDataURL())
         );
         window.localStorage.setItem("firstImg", canvas.toDataURL());
-        this.testImg = canvas.toDataURL()
+        this.testImg = canvas.toDataURL();
         this.$router.replace("/dealphoto");
       });
     },
@@ -311,11 +365,11 @@ export default {
   overflow-x: hidden;
 
   .sss {
-      position: fixed;
-      top: 0px;
-      left: 0px;
-      width: 50px;
-      height: 80px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 50px;
+    height: 80px;
   }
   .choose-bg {
     position: relative;
@@ -392,6 +446,15 @@ export default {
           background-position: center;
           width: 100%;
           height: 100%;
+          img {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+        //   img {
+        //     width: 100%;
+        //     height: 100%;
+        //   }
         }
         .model-img {
           position: absolute;
