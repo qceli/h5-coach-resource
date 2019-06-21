@@ -9,8 +9,8 @@
       </div>
       <!-- <div> -->
       <div v-show="!fromshare" class="people-img" ref="box">
-        <img crossorigin="anonymous" :src="secondImg" @load="loadImg">
-        <!-- <img :src="cvsimg" alt="分享背景图" @load="loadImg"> -->
+        <img crossorigin="anonymous" :src="secondImg" >
+        <!-- <img :src="cvsimg" alt="分享背景图" @load=""> @load="" -->
         
       </div>
       <div v-show="fromshare" class="share-img" ref="sharebox">
@@ -93,7 +93,11 @@ export default {
         alert("error");
         return;
       }
+      
       this.secondImg = firstImg;
+      
+      this.loadImg()
+      //alert(this.this.secondImg)
     }
   },
   methods: {
@@ -119,10 +123,9 @@ export default {
           console.log(response);
         });
     },
-    test() {
-      this.loadImg();
-    },
     loadImg() {
+      // alert("******")
+      //alert(this.secondImg) 
       var id = this.$route.query.id;
       // console.log(decodeURIComponent(params))
       if (id != 1) {
@@ -161,7 +164,9 @@ export default {
         this.testImg = lastImg;
         this.getImgUrl(canvas.toDataURL());
       }).catch(e => {
-        console.log(e);
+        //   alert("出错了")
+        //    alert(e)
+        console.log("==========", e);
       });
     },
     base64ToBlob(code) {
@@ -202,7 +207,7 @@ export default {
         })
         .catch(response => {
           console.log(response);
-          alert("getImgUrl(baseImg) error");
+          //alert("getImgUrl(baseImg) error");
         });
     }
   }

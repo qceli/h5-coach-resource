@@ -36,7 +36,7 @@ export const initWechatJs = (
         console.log();
       },
       cancel: function() {
-        alert("取消分享");
+        //alert("取消分享");
       }
     });
     wx.onMenuShareAppMessage({
@@ -52,12 +52,12 @@ export const initWechatJs = (
         //alert('已取消');
       },
       fail: function fail(res) {
-        alert(JSON.stringify(res));
+        //alert(JSON.stringify(res));
       }
     });
   });
   wx.error(function(res) {
-    alert("微信验证失败");
+    //alert("微信验证失败");
   });
 };
 
@@ -80,7 +80,7 @@ export const openCameraForPic = function(type, uploadCallback) {
       }
     },
     error: function(e) {
-      alert(e);
+      //alert(e);
     }
   });
 };
