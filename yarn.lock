@@ -5069,12 +5069,12 @@ jest@^22.0.4:
     import-local "^1.0.0"
     jest-cli "^22.4.4"
 
-jquery.panzoom@^3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/jquery.panzoom/-/jquery.panzoom-3.2.3.tgz#66973cad34749f244c1317cdba4e1e779798d372"
-  integrity sha512-TQ8tykmjJj//+8M3CIQ9RhCUukVy/UOsfwS/ecP6lRqEHA+qBXflfGoxLrabP1DZO15l9flV7GHsmLesjupT2A==
+jquery.panzoom@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/jquery.panzoom/-/jquery.panzoom-3.2.2.tgz#b41940f5079195be504073b677d8c548f47ece8a"
+  integrity sha1-tBlA9QeRlb5QQHO2d9jFSPR+zoo=
 
-jquery@^3.4.1:
+jquery@^3.2.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==

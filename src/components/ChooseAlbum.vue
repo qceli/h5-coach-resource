@@ -161,15 +161,15 @@ export default {
       const img = $('.upload-photo img');
 
 
-    //   const container = img.parent();
-    //   const sx = container.width() / img.width();
-    //   const sy = container.height() / img.height();
-    //   console.log("s:", sx, sy);
-    //   img.panzoom({
-    //     contain: "invert",
-    //     minScale: Math.max(sx, sy),
-    //     maxScale: Math.max(sx, sy) * 5
-    //   }).panzoom("zoom", Math.max(sx, sy), { silent: true });
+      const container = img.parent();
+      const sx = container.width() / img.width();
+      const sy = container.height() / img.height();
+      console.log("s:", sx, sy);
+      img.panzoom({
+        contain: "invert",
+        minScale: Math.max(sx, sy),
+        maxScale: Math.max(sx, sy) * 5
+      }).panzoom("zoom", Math.max(sx, sy), { silent: true });
 
       // alert(this.imgw)
       //   const img = $(".upload-photo img");
