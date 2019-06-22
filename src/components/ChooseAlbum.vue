@@ -69,13 +69,13 @@ export default {
       // iX: 0, // 鼠标坐标 与 拖拽按钮 间距 x
       // iY: 0, // 鼠标坐标 与 拖拽按钮 间距 y
       albumArray: [
-        require("../assets/images/album_11@2x.png"),
-        require("../assets/images/album_22@2x.png"),
-        require("../assets/images/album_33@2x.png")
+        require("../assets/images/album_1@2x.png"),
+        require("../assets/images/album_2@2x.png"),
+        require("../assets/images/album_3@2x.png")
       ],
-      albumImg: require("../assets/images/album_11@2x.png"),
+      albumImg: require("../assets/images/album_1@2x.png"),
 
-      ggwp: "http://pic37.nipic.com/20140113/8800276_184927469000_2.png",
+      ggwp: "http://img5.imgtn.bdimg.com/it/u=3300305952,1328708913&fm=26&gp=0.jpg",
       //ggwp: "http://192.168.1.6:9999/b.png",
       // photoIndex: 1000, 
       // photoLeft: 0,
@@ -420,20 +420,22 @@ export default {
           width: 100%;
           height: 100%;
 
-        img {
-            position: absolute;
-            left: 0;
-            top: 0;
-          //width: 100%;
-        }
-        //   img {
+        // img {
         //     position: absolute;
-        //     // left: 0;
-        //     // top: 0;
-        //     left: 50%;
-        //     top: 50%;
-        //     transform: translateY(-50%) translateX(-50%);
-        //   }
+        //     left: 0;
+        //     top: 0;
+        //   //width: 100%;
+        // }
+          img {
+            position: absolute;
+             left: 0;
+            // top: 0;
+            //width: 200px;
+            height: 300px;
+            //left: 50%;
+            top: 50%;
+            transform: translateY(-50%); // translateX(-50%);
+          }
         }
 
         .model-img {
