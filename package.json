@@ -21,7 +21,7 @@
     "jquery.panzoom": "3.2.2",
     "mint-ui": "^2.2.13",
     "mocks": "0.0.15",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
     "vue-router": "^3.0.1",
